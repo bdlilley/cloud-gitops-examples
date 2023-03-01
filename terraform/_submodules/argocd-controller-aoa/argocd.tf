@@ -1,11 +1,7 @@
 
-
 resource "helm_release" "argocd" {
-  depends_on = [
-    module.eks_managed_node_group
-  ]
+  count = var.argocd.enabled ? 1 : 0
 
-  count            = var.argocd.enabled ? 1 : 0
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argo-cd"
@@ -26,7 +22,6 @@ EOT
 resource "helm_release" "argocd-aoa" {
   for_each = var.argocd.apps
   depends_on = [
-    module.eks_managed_node_group,
     helm_release.argocd
   ]
 
@@ -49,19 +44,19 @@ helm:
           create: true
           name: external-secrets
           annotations:
-            eks.amazonaws.com/role-arn: ${module.iam-assumable-role-ext-secrets.iam_role_arn}
+            eks.amazonaws.com/role-arn: ${var.irsa.ext-secrets}
       aws-load-balancer-controller:
-        clusterName: ${aws_eks_cluster.eks.name}
+        clusterName: ${var.eksClusterName}
         serviceAccount:
           create: true
           name: aws-load-balancer-controller
           annotations:
-            eks.amazonaws.com/role-arn: ${module.iam-assumable-role-aws-lb-controller.iam_role_arn}
+            eks.amazonaws.com/role-arn: ${var.irsa.aws-lb-controller}
       gloo-mesh-enterprise:
         glooMeshMgmtServer:
           serviceAccount:
             extraAnnotations:
-              eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
+              eks.amazonaws.com/role-arn: ${var.irsa.gloo-mgmt-server}
       gloo-ilcm:
         istio:
           hub: ${var.ISTIO_HUB}

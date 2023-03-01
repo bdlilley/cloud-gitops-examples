@@ -7,3 +7,4 @@ module "iam-assumable-role-aws-lb-controller" {
   role_policy_arns              = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/AWSLoadBalancerControllerIAMPolicy"]
   oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:aws-load-balancer-controller"]
 }
+

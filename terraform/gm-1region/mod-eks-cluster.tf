@@ -13,22 +13,6 @@ module "eks" {
   tags         = var.tags
   region       = "us-east-2"
 
-  argocd = {
-    enabled = true
-    apps = {
-      my-cluster = {
-        repo     = "https://github.com/bensolo-io/cloud-gitops-examples.git"
-        revision = "main"
-        path     = "argocd/argocd-aoa"
-        valueFiles = [
-          "values-aws-core-infra.yaml",
-          "values-redis-tester.yaml",
-          "values-gm-2.3.0-beta1-istio-1.16-SIMPLE.yaml",
-        ]
-      }
-    }
-  }
-
   cluster = {
     name             = "cluster"
     version          = "1.25"
@@ -50,4 +34,3 @@ module "eks" {
 output "eks" {
   value = module.eks
 }
-

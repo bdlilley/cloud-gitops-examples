@@ -25,17 +25,6 @@ variable "cluster" {
 variable "nodeGroups" {
 }
 
-variable "argocd" {
-  default = {
-    enabled : true
-    apps : {}
-  }
-}
-
-variable "ISTIO_HUB" {
-  default = "set-variable-in-module"
-}
-
 locals {
   resourcePrefix = "${var.stackVersion}-${var.moduleName}"
 }
