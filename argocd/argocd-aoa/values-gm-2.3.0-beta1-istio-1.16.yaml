@@ -1,0 +1,38 @@
+
+charts:
+
+  gloo-mesh-enterprise:
+    wave: 200
+    repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-enterprise
+    chart: gloo-mesh-enterprise
+    revision: v2.3.0-beta1
+    namespace: gloo-mesh
+    syncPolicy:
+      syncOptions: [] # dont create namespace
+    globalValues:
+      cluster: mgmt
+    values:
+      # license secret created via terraform
+      licenseSecretName: gloo-mesh-license
+      mgmtClusterName: mgmt-cluster
+      glooMeshMgmtServer:
+        serviceType: ClusterIP
+      legacyMetricsPipeline:
+        enabled: false
+      metricsgateway:
+        enabled: true
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1Gi
+          limits:
+            cpu: 600m
+            memory: 2Gi
+      deploymentOverrides:
+        spec:
+          template:
+            metadata:
+              annotations:
+                sidecar.istio.io/inject: "true"
+              labels:
+                istio.io/rev: "1-16"

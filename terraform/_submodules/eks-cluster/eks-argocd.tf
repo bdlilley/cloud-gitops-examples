@@ -57,6 +57,11 @@ helm:
           name: aws-load-balancer-controller
           annotations:
             eks.amazonaws.com/role-arn: ${module.iam-assumable-role-aws-lb-controller.iam_role_arn}
+      gloo-mesh-enterprise:
+        glooMeshMgmtServer:
+          serviceAccount:
+            extraAnnotations:
+              eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
 EOT
   ]
 }
