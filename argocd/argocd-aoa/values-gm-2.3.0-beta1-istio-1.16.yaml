@@ -21,6 +21,7 @@ charts:
         enabled: false
       metricsgateway:
         enabled: true
+        serviceType: ClusterIP
         resources:
           requests:
             cpu: 300m
