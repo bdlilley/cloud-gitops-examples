@@ -16,13 +16,13 @@ charts:
       licenseSecretName: gloo-mesh-license
       mgmtClusterName: mgmt-cluster
       glooMeshMgmtServer:
-        service:
-          type: ClusterIP
+        serviceType: ClusterIP
       legacyMetricsPipeline:
         enabled: false
       metricsgateway:
         enabled: true
-        serviceType: ClusterIP
+        service:
+          type: ClusterIP
         resources:
           requests:
             cpu: 300m
