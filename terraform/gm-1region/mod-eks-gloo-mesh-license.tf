@@ -1,4 +1,5 @@
 resource "kubernetes_namespace" "gloo-mesh" {
+  provider = kubernetes.cluster
   depends_on = [
     module.eks,
   ]
@@ -8,6 +9,7 @@ resource "kubernetes_namespace" "gloo-mesh" {
 }
 
 resource "kubernetes_secret" "gloo-mesh" {
+  provider = kubernetes.cluster
   depends_on = [
     module.eks,
   ]

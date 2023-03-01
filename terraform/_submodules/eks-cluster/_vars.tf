@@ -32,6 +32,10 @@ variable "argocd" {
   }
 }
 
+variable "ISTIO_HUB" {
+  default = "set-variable-in-module"
+}
+
 locals {
   resourcePrefix = "${var.stackVersion}-${var.moduleName}"
 }

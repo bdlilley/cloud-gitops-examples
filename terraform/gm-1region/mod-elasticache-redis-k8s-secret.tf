@@ -1,5 +1,6 @@
 
 resource "kubernetes_secret" "redis-tester" {
+  provider = kubernetes.cluster
   depends_on = [
     module.eks,
   ]

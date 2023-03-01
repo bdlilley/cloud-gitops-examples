@@ -62,6 +62,9 @@ helm:
           serviceAccount:
             extraAnnotations:
               eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
+      gloo-ilcm:
+        istio:
+          hub: ${var.ISTIO_HUB}
 EOT
   ]
 }

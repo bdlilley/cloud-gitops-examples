@@ -15,7 +15,7 @@ spec:
   project: default
   source:
     {{- if not ($chart).repo }}
-    {{- $chart = (merge $chart (dict "repo" "https://github.com/bdlilley/gloo-platform-argocd")) }}
+    {{- $chart = (merge $chart (dict "repo" "https://github.com/bensolo-io/cloud-gitops-examples")) }}
     {{- end }}
     repoURL: {{  $chart.repo }}
     {{- if ($chart).revision }}

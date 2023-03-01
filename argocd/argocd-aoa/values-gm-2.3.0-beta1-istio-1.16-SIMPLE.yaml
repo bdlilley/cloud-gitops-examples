@@ -1,0 +1,57 @@
+
+charts:
+
+  gloo-mesh-enterprise:
+    wave: 200
+    repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-enterprise
+    chart: gloo-mesh-enterprise
+    revision: v2.3.0-beta1
+    namespace: gloo-mesh
+    syncPolicy:
+      syncOptions: [] # dont create namespace
+    globalValues:
+      cluster: mgmt
+    values:
+      # license secret created via terraform
+      licenseSecretName: gloo-mesh-license
+      mgmtClusterName: mgmt-cluster
+      glooMeshMgmtServer:
+        serviceType: ClusterIP
+      legacyMetricsPipeline:
+        enabled: false
+      metricsgateway:
+        enabled: true
+        service:
+          type: ClusterIP
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1Gi
+          limits:
+            cpu: 600m
+            memory: 2Gi
+      deploymentOverrides:
+        spec:
+          template:
+            metadata:
+              annotations:
+                sidecar.istio.io/inject: "true"
+              labels:
+                istio.io/rev: "1-16"
+
+  gloo-ilcm:
+    wave: 300
+    repo: https://github.com/bensolo-io/cloud-gitops-examples
+    path: argocd/charts/gm-ilcm-istiod
+    revision: main
+    namespace: gloo-mesh
+    syncPolicy:
+      syncOptions: [] # dont create namespace
+    values:
+      clusters:
+      - mgmt-cluster
+      istio:
+        revision: 1-16
+        tag: 1.16.2-solo
+        # injected by terraform; see https://support.solo.io/hc/en-us/articles/4414409064596 
+        # hub: todo
