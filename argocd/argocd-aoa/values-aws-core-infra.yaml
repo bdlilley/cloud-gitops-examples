@@ -22,8 +22,15 @@ charts:
     values:
       # cluster name set as a global value
       replicaCount: 1
-
-
+          
+  external-secrets:
+    # wave defaults to 100
+    wave: 1
+    repo: https://charts.external-secrets.io
+    revision: "0.7.2"
+    chart: external-secrets
+    namespace: external-secrets
+          
   # # external-dns to automate route53 records
   # external-dns:
   #   # wave defaults to 100
@@ -47,12 +54,3 @@ charts:
   #     serviceAccount:
   #       create: false
   #       name: external-dns
-          
-  external-secrets:
-    # wave defaults to 100
-    wave: 1
-    repo: https://charts.external-secrets.io
-    revision: "0.7.2"
-    chart: external-secrets
-    namespace: external-secrets
-          
