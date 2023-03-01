@@ -12,11 +12,36 @@ module "eks" {
   moduleName   = var.moduleName
   tags         = var.tags
   region       = "us-east-2"
+
+  argocd = {
+    enabled = true
+    apps = {
+      my-cluster = {
+        repo     = "https://github.com/bensolo-io/cloud-gitops-examples.git"
+        revision = "main"
+        path     = "argocd/argocd-aoa"
+        valueFiles = [
+          "values-aws-core-infra.yaml"
+        ]
+      }
+    }
+  }
+
   cluster = {
-    name             = "redis-tester"
+    name             = "cluster"
     version          = "1.25"
     securityGroupIds = local.securityGroupIds
     subnetIds        = local.subnetIds
+  }
+
+  nodeGroups = {
+    default = {
+      min_size        = 1
+      max_size        = 2
+      desired_size    = 1
+      instance_types  = ["m5.large"]
+      commonClusterSg = module.us-east-2.commonSecurityGroup.id
+    }
   }
 }
 
@@ -24,26 +49,3 @@ output "eks" {
   value = module.eks
 }
 
-module "eks_managed_node_group" {
-  source = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
-
-  name = var.stackVersion
-
-  cluster_name    = module.eks.eks.name
-  cluster_version = module.eks.eks.version
-
-  subnet_ids = local.subnetIds
-
-  cluster_primary_security_group_id = module.us-east-2.commonSecurityGroup.id
-  vpc_security_group_ids            = local.securityGroupIds
-
-  min_size     = 1
-  max_size     = 2
-  desired_size = 1
-
-  instance_types = ["m5.large"]
-
-  labels = {
-    stackVersion = var.stackVersion
-  }
-}

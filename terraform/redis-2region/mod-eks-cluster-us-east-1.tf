@@ -14,6 +14,31 @@ module "eks-us-east-1" {
     securityGroupIds = local.vpclocals["us-east-1"].securityGroupIds
     subnetIds        = local.vpclocals["us-east-1"].subnetIds
   }
+
+  argocd = {
+    enabled = true
+    apps = {
+      my-cluster = {
+        repo     = "https://github.com/bensolo-io/cloud-gitops-examples.git"
+        revision = "main"
+        path     = "argocd/argocd-aoa"
+        valueFiles = [
+          "values-aws-core-infra.yaml"
+        ]
+      }
+    }
+  }
+
+  nodeGroups = {
+    default = {
+      min_size        = 1
+      max_size        = 2
+      desired_size    = 1
+      instance_types  = ["m5.large"]
+      commonClusterSg = module.us-east-2.commonSecurityGroup.id
+    }
+  }
+
   providers = {
     aws = aws.us-east-1
   }
@@ -21,31 +46,4 @@ module "eks-us-east-1" {
 
 output "eks-us-east-1" {
   value = module.eks-us-east-1
-}
-
-module "eks_managed_node_group-us-east-1" {
-  source = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
-
-  name = var.stackVersion
-
-  cluster_name    = module.eks-us-east-1.eks.name
-  cluster_version = module.eks-us-east-1.eks.version
-
-  subnet_ids = local.vpclocals["us-east-1"].subnetIds
-
-  cluster_primary_security_group_id = module.vpc-us-east-1.commonSecurityGroup.id
-  vpc_security_group_ids            = local.vpclocals["us-east-1"].securityGroupIds
-
-  min_size     = 1
-  max_size     = 2
-  desired_size = 1
-
-  instance_types = ["m5.large"]
-
-  labels = {
-    stackVersion = var.stackVersion
-  }
-  providers = {
-    aws = aws.us-east-1
-  }
 }
