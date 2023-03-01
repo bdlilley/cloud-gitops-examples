@@ -1,0 +1,83 @@
+{{- $root := . }}
+{{- $syncPolicy := dict  }}
+{{- range $chartName, $chart := .Values.charts }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $chartName }}
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ include "app.wave" $chart }}
+spec:
+  project: default
+  source:
+    {{- if not ($chart).repo }}
+    {{- $chart = (merge $chart (dict "repo" "https://github.com/bdlilley/gloo-platform-argocd")) }}
+    {{- end }}
+    repoURL: {{  $chart.repo }}
+    {{- if ($chart).revision }}
+    # branch for git-hosted, chart version for helm registry-hosted
+    targetRevision: {{ $chart.revision }}
+    {{- else }}
+    {{- if and ($chart).repo (eq $chart.repo "https://istio-release.storage.googleapis.com/charts") }}
+    targetRevision: {{ $root.Values.istioVersion }}
+    {{- else if and ($chart).repo (hasPrefix "https://storage.googleapis.com/gloo-mesh-enterprise" $chart.repo) }}
+    targetRevision: {{ $root.Values.glooVersion }}
+    {{- end }}
+    {{- end }}
+    {{- if ($chart).path }}
+    # only used for git-hosted charts
+    path: {{ $chart.path }}
+    {{- end }}
+    {{- if ($chart).plugin }}
+    plugin:
+      name: {{ $chart.plugin }}
+    {{- if not ($chart).path }}
+    path: "."
+    {{- end }}
+    {{- end }}
+    {{- if ($chart).chart }}
+    # only used for registry-hosted charts
+    chart: {{ $chart.chart }}
+    {{- end }} #nd if chart.chart
+
+{{- $theValues := dict}}
+{{- if ($chart).values }}
+{{- $theValues = deepCopy ($chart).values }}
+{{- end }}
+
+{{- $theGlobalValues := dict}}
+{{- if ($chart).globalValues }}
+{{- $theGlobalValues = deepCopy ($chart).globalValues }}
+{{- end }}
+
+# if the root chart has globals for this chart, copy them into the chart's values
+{{- if and ($root).Values.global (hasKey $root.Values.global $chartName) }}
+{{- $theValues = merge $theValues (get $root.Values.global $chartName) }}
+{{- end }}
+
+{{- if and (not ($chart).plugin) $theValues }}
+    helm:
+      values: |
+{{- if $theValues  }}
+{{ toYaml $theValues | indent 8 }}
+{{- end }}
+
+{{- if $theGlobalValues }}
+        global:
+{{ toYaml $theGlobalValues | indent 10 }}
+{{- end }}
+
+
+{{- end }}
+
+  destination:
+    server: https://kubernetes.default.svc
+    {{- if ($chart).namespace }}
+    namespace: {{ $chart.namespace }}
+    {{- end }}
+  syncPolicy:  {{ include "app.syncPolicy" $chart }}
+{{- end }} 

@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Release.Name }}
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.repoURL }}
+    targetRevision: {{ .Values.targetRevision }}
+    path: {{ .Values.path }}
+    helm:
+      valueFiles: {{ toJson .Values.helm.valueFiles }}
+      values: |
+{{ toYaml .Values.helm.values | indent 8 }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true 
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd  

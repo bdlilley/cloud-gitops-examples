@@ -1,0 +1,4 @@
+stackVersion="solo-v0"
+
+
+
