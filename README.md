@@ -5,6 +5,16 @@ This repo serves two purposes:
 * gitops tooling examples with terraform, argocd, etc.
 * demonstrate various cloud topologies with gloo products
 
+## Available Modules
+
+|module|argo apps|description|
+|---|---|---|
+|[vpc-one-region](./terraform/vpc-one-region)| |creates a single vpc with 2 az's, common private endpoints, and an internet gateway with nat instances for private nets|
+|[vpc-two-region](./terraform/vpc-two-region)| |same as vpc-one-region, but with two regions and vpc peering|
+|[redis-1region](./terraform/redis-1region)| |1 region vpc, elasticache single-node cluster with auth and tls, single-node eks cluster|
+|[redis-2region](./terraform/redis-2region)| |2 regions, each with vpc, elasticache in 2-region global mode with tls and auth, single-node eks cluster in each region|
+|[eks-1region](./terraform/eks-1region)|[values-aws-core-infra.yaml](./argocd/argocd-aoa/values-aws-core-infra.yaml)|1 region vpc, single-node eks cluster|
+
 ## Requirements
 
 * terraform (I suggest https://tfswitch.warrensbox.com/ to manage versions)
@@ -47,16 +57,6 @@ Some modules require additional env vars (like `redis_auth` in the redis modules
     ```
 5. Validate the terraform plan to be executed
 6. Apply with `./terraform-wrapper.sh apply`
-
-# Available Modules
-
-|module|argo apps|description|
-|---|---|
-|[vpc-one-region](./terraform/vpc-one-region)| |creates a single vpc with 2 az's, common private endpoints, and an internet gateway with nat instances for private nets|
-|[vpc-two-region](./terraform/vpc-two-region)| |same as vpc-one-region, but with two regions and vpc peering|
-|[redis-1region](./terraform/redis-1region)| |1 region vpc, elasticache single-node cluster with auth and tls, single-node eks cluster|
-|[redis-2region](./terraform/redis-2region)| |2 regions, each with vpc, elasticache in 2-region global mode with tls and auth, single-node eks cluster in each region|
-|[eks-1region](./terraform/eks-1region)|[values-aws-core-infra.yaml](./argocd/argocd-aoa/values-aws-core-infra.yaml)|1 region vpc, single-node eks cluster|
 
 # Creating new modules
 
