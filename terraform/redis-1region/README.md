@@ -11,24 +11,7 @@ This module does not create public redis endpoints or VPN connections.  To acces
 
 ### Validate elasticache connection
 
-Create secret with redis details and deploy a test container:
-
-```bash
-kubectl apply -f- <<EOF
-kind: Secret
-apiVersion: v1
-metadata:
-  name: redis-config
-  namespace: default
-stringData:
-  token: ${TF_VAR_redis_auth}
-  address: `./terraform-wrapper.sh output --json | jq -r '.redis.value'`
-EOF
-
-kubectl apply -k https://github.com/bensolo-io/aws-redis-simple.git/deploy/kustomize
-```
-
-If the pod became ready it was able to set/get a key in elasticache:
+The argocd aoa repo deploys a redis tester.  If the pod became ready it was able to set/get a key in elasticache:
 
 ```bash
 kg pods -l app=redis-tester -n default
