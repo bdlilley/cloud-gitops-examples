@@ -1,6 +1,5 @@
 charts:
   redis-tester:
     wave: 200
-    kustomize:
-      repo: https://github.com/bensolo-io/aws-redis-simple.git
-      path: deploy/kustomize
+    repo: https://github.com/bensolo-io/aws-redis-simple.git
+    path: deploy/kustomize
