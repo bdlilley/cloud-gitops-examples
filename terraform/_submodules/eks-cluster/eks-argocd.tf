@@ -50,6 +50,13 @@ helm:
           name: external-secrets
           annotations:
             eks.amazonaws.com/role-arn: ${module.iam-assumable-role-ext-secrets.iam_role_arn}
+      aws-load-balancer-controller:
+        clusterName: ${aws_eks_cluster.eks.name}
+        serviceAccount:
+          create: true
+          name: aws-load-balancer-controller
+          annotations:
+            eks.amazonaws.com/role-arn: ${module.iam-assumable-role-aws-lb-controller.iam_role_arn}
 EOT
   ]
 }

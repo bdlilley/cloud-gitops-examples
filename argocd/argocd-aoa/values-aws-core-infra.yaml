@@ -11,24 +11,18 @@ charts:
   #   values:
   #     installCRDs: true
 
-  # aws-load-balancer-controller:
-  #   wave: 1
-  #   repo: https://aws.github.io/eks-charts
-  #   chart: aws-load-balancer-controller
-  #   revision: "1.4.5"
-  #   namespace: kube-system
-  #   syncPolicy:
-  #     syncOptions: [] # dont create namespace
-  #   values:
-  #     # cluster name set as a global value
-  #     replicaCount: 1
-  #     serviceAccount:
-  #       create: false
-  #       name: aws-load-balancer-controller
-  #     defaultTags:
-  #       create-by: "benji_lilley"
-  #       team: product
-  #       purpose: product-development
+  aws-load-balancer-controller:
+    wave: 1
+    repo: https://aws.github.io/eks-charts
+    chart: aws-load-balancer-controller
+    revision: "1.4.5"
+    namespace: kube-system
+    syncPolicy:
+      syncOptions: [] # dont create namespace
+    values:
+      # cluster name set as a global value
+      replicaCount: 1
+
 
   # # external-dns to automate route53 records
   # external-dns:
