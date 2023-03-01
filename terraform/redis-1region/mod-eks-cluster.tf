@@ -21,7 +21,8 @@ module "eks" {
         revision = "main"
         path     = "argocd/argocd-aoa"
         valueFiles = [
-          "values-aws-core-infra.yaml"
+          "values-aws-core-infra.yaml",
+          "values-redis-tester.yaml"
         ]
       }
     }
