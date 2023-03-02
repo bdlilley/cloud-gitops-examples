@@ -36,7 +36,7 @@ spec:
                 app: istio-ingressgateway
               k8s:
                 service:
-                  type: LoadBalancer
+                  type: NodePort
                   selector:
                     istio: ingressgateway
                   # Default ports
