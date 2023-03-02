@@ -10,7 +10,7 @@ charts:
     syncPolicy:
       syncOptions: [] # dont create namespace
     globalValues:
-      cluster: mgmt
+      cluster: mgmt-cluster
     values:
       # license secret created via terraform
       licenseSecretName: gloo-mesh-license
