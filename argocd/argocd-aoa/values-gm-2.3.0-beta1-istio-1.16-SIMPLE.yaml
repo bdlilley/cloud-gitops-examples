@@ -1,7 +1,6 @@
 
-charts: {}
+charts: 
 
-nothing:
   gloo-mesh-enterprise:
     wave: 200
     repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-enterprise
