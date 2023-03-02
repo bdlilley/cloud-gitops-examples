@@ -39,7 +39,7 @@ charts:
               labels:
                 istio.io/rev: "1-16"
 
-  gloo-ilcm:
+  gloo-ilcm-simple:
     wave: 1000
     repo: https://github.com/bensolo-io/cloud-gitops-examples.git
-    path: argocd/kustomize/ilcm-istiod/base
+    path: argocd/kustomize/ilcm-simple/base
