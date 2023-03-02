@@ -16,7 +16,7 @@ spec:
   - name: 'mgmt-cluster'
     namespaces:
     - name: platform-config
-    - name: default
+    - name: httpbin
     - name: gloo-mesh
     - name: gloo-mesh-gateways
     - name: gloo-mesh-addons
