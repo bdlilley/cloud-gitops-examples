@@ -2,6 +2,7 @@ apiVersion: admin.gloo.solo.io/v2
 kind: IstioLifecycleManager
 metadata:
   name: istiod-control-plane
+  namespace: gloo-mesh
 spec:
   installations:
       # The revision for this installation, such as 1-14
