@@ -57,9 +57,6 @@ helm:
           serviceAccount:
             extraAnnotations:
               eks.amazonaws.com/role-arn: ${var.irsa.gloo-mgmt-server}
-      gloo-ilcm:
-        istio:
-          hub: ${var.ISTIO_HUB}
 EOT
   ]
 }

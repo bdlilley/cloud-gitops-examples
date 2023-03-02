@@ -41,17 +41,4 @@ charts:
 
   gloo-ilcm:
     wave: 300
-    repo: https://github.com/bensolo-io/cloud-gitops-examples
-    path: argocd/charts/gm-ilcm-istiod
-    revision: main
-    namespace: gloo-mesh
-    syncPolicy:
-      syncOptions: [] # dont create namespace
-    values:
-      clusters:
-      - mgmt-cluster
-      istio:
-        revision: 1-16
-        tag: 1.16.2-solo
-        # injected by terraform; see https://support.solo.io/hc/en-us/articles/4414409064596 
-        # hub: todo
+    path: argocd/kustomize/ilcm-istiod/base

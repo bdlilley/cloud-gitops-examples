@@ -9,7 +9,6 @@ module "argocd-aoa" {
   source         = "../_submodules/argocd-controller-aoa"
   irsa           = module.eks.irsa
   eksClusterName = module.eks.eks.name
-  ISTIO_HUB      = var.ISTIO_HUB
   argocd = {
     enabled = true
     apps = {
