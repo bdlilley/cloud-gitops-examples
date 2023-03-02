@@ -19,21 +19,20 @@ spec:
     - name: gloo-mesh
     - name: gloo-mesh-gateways
     - name: gloo-mesh-addons
-
-# ---
-# apiVersion: admin.gloo.solo.io/v2
-# kind: WorkspaceSettings
-# metadata:
-#   name: default
-#   namespace: default-config
-# spec:
-#   options:
-#     federation:                
-#       enabled: false
-#     eastWestGateways:      
-#     - selector:
-#         labels:
-#           istio: eastwestgateway
-#     serviceIsolation:     
-#       enabled: true
-#       trimProxyConfig: true
+---
+apiVersion: admin.gloo.solo.io/v2
+kind: WorkspaceSettings
+metadata:
+  name: default
+  namespace: default-config
+spec:
+  options:
+    federation:                
+      enabled: false
+    eastWestGateways:      
+    - selector:
+        labels:
+          istio: eastwestgateway
+    serviceIsolation:     
+      enabled: true
+      trimProxyConfig: true
