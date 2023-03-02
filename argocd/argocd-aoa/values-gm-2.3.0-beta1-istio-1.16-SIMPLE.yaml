@@ -39,7 +39,39 @@ charts:
               labels:
                 istio.io/rev: "1-16"
 
-  gloo-ilcm-simple:
+  gloo-agent:
+    wave: 300
+    repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-agent
+    chart: gloo-mesh-agent
+    revision: v2.3.0-beta1
+    namespace: gloo-mesh
+    syncPolicy:
+      syncOptions: [] # dont create namespace
+    globalValues:
+      cluster: mgmt-cluster
+    values:
+      cluster: mgmt-cluster
+      metricscollector:
+        enabled: true
+        config:
+          exporters:
+            otlp:
+              endpoint: gloo-metrics-gateway.gloo-mesh.svc.cluster.local:4317
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1Gi
+          limits:
+            cpu: 600m
+            memory: 2Gi
+
+  gloo-mesh-simple:
     wave: 1000
     repo: https://github.com/bensolo-io/cloud-gitops-examples.git
+    path: argocd/kustomize/gloo-mesh-simple/base
+
+  gloo-ilcm-simple:
+    wave: 2000
+    repo: https://github.com/bensolo-io/cloud-gitops-examples.git
     path: argocd/kustomize/ilcm-simple/base
+
