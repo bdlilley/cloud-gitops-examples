@@ -41,4 +41,5 @@ charts:
 
   gloo-ilcm:
     wave: 300
+    repo: https://github.com/bensolo-io/cloud-gitops-examples.git
     path: argocd/kustomize/ilcm-istiod/base
