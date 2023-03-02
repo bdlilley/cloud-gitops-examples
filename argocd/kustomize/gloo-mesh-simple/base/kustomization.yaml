@@ -7,3 +7,4 @@ resources:
 - kubernetes-cluster.yaml
 - workspace.yaml
 - vg.yaml
+- httpbin.yaml
