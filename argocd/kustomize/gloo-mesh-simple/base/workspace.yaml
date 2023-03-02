@@ -16,6 +16,7 @@ spec:
   - name: 'mgmt-cluster'
     namespaces:
     - name: platform-config
+    - name: gloo-mesh
   - name: '*'
     namespaces:
     - name: gloo-mesh-gateways
