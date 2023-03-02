@@ -11,7 +11,6 @@ resource "helm_release" "argocd" {
   timeout          = 300
 
   values = [<<EOT
-bump: 1
 dex:
   enabled: false
 notifications:
@@ -39,7 +38,6 @@ path: ${each.value.path}
 helm:
   valueFiles: ${jsonencode(each.value.valueFiles)}
   values:
-    bump: 1
     global:
       external-secrets:
         serviceAccount:
