@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: default-config
+  name: workspace-config
 ---
 apiVersion: admin.gloo.solo.io/v2
 kind: Workspace
 metadata:
-  name: default
+  name: workspace
   namespace: gloo-mesh
   labels:
     gloo.solo.io/team: 'default'
@@ -15,7 +15,7 @@ spec:
   workloadClusters:
   - name: 'mgmt-cluster'
     namespaces:
-    - name: default-config
+    - name: workspace-config
     - name: gloo-mesh
     - name: gloo-mesh-gateways
     - name: gloo-mesh-addons
@@ -23,8 +23,8 @@ spec:
 apiVersion: admin.gloo.solo.io/v2
 kind: WorkspaceSettings
 metadata:
-  name: default
-  namespace: default-config
+  name: workspace
+  namespace: workspace-config
 spec:
   options:
     federation:                
