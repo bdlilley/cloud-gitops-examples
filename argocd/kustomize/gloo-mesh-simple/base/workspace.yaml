@@ -17,10 +17,9 @@ spec:
     namespaces:
     - name: platform-config
     - name: gloo-mesh
-  - name: '*'
-    namespaces:
     - name: gloo-mesh-gateways
     - name: gloo-mesh-addons
+    - name: istio-system
 ---
 apiVersion: admin.gloo.solo.io/v2
 kind: WorkspaceSettings
