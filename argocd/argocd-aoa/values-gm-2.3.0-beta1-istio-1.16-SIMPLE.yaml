@@ -51,6 +51,8 @@ charts:
       cluster: mgmt-cluster
     values:
       cluster: mgmt-cluster
+      relay:
+        serverAddress: "gloo-mesh-mgmt-server.gloo-mesh:9900"
       metricscollector:
         enabled: true
         config:
