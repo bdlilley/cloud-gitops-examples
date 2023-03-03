@@ -66,5 +66,5 @@ k logs -l app=redis-tester -n default
 ### Cleanup
 
 ```bash
-./terraform-wrapper.sh destroy
+./terraform-wrapper.sh destroy --auto-approve
 ```
