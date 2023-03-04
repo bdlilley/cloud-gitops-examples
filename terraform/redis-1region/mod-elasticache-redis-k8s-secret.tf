@@ -9,7 +9,8 @@ resource "kubernetes_secret" "redis-tester" {
   }
 
   data = {
-    token   = var.redis_auth
-    address = "${aws_elasticache_replication_group.redis.primary_endpoint_address}:${aws_elasticache_replication_group.redis.port}"
+    token = var.redis_auth
+    host  = aws_elasticache_replication_group.redis.primary_endpoint_address
+    port  = aws_elasticache_replication_group.redis.port
   }
 }
