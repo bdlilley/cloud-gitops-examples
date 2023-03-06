@@ -22,6 +22,19 @@ variable "region" {
 variable "cluster" {
 }
 
+variable "argocd" {
+  # type = object({
+  #   valueFiles = optional(list(string))
+  # })
+  default = {
+    valueFiles = []
+  }
+}
+
+variable "secrets" {
+  default = []
+}
+
 variable "nodeGroups" {
 }
 

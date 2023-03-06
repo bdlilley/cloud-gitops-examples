@@ -1,4 +1,3 @@
-
 resource "helm_release" "argocd" {
   count = var.argocd.enabled ? 1 : 0
 

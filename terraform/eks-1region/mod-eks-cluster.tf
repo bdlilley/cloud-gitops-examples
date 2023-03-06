@@ -20,18 +20,36 @@ module "eks" {
     subnetIds        = local.subnetIds
   }
 
+  argocd = {
+    name     = "aoa-${module.eks.eks.name}"
+    repo     = "https://github.com/bensolo-io/cloud-gitops-examples.git"
+    revision = "main"
+    path     = "argocd/argocd-aoa"
+    valueFiles = [
+      "values-aws-core-infra.yaml",
+    ]
+  }
+
+  # this should only be used for foundational bootstrapping secrets - we should just
+  # use ext-secrets from within an argo install for infrastructure components
+  # secrets = [
+  #   {
+  #     name            = "redis-config"
+  #     namespace       = "snazzy"
+  #     createNamespace = true
+  #     data = {
+  #       token = "bar"
+  #     }
+  #   }
+  # ]
+
   nodeGroups = {
     default = {
       min_size        = 1
       max_size        = 2
       desired_size    = 1
-      instance_types  = ["m5.large"]
+      instance_types  = ["m5.2xlarge"]
       commonClusterSg = module.us-east-2.commonSecurityGroup.id
     }
   }
 }
-
-output "eks" {
-  value = module.eks
-}
-

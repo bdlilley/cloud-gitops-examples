@@ -20,6 +20,31 @@ module "eks" {
     subnetIds        = local.subnetIds
   }
 
+  argocd = {
+    name     = "aoa-${module.eks.eks.name}"
+    repo     = "https://github.com/bensolo-io/cloud-gitops-examples.git"
+    revision = "main"
+    path     = "argocd/argocd-aoa"
+    valueFiles = [
+      "values-aws-core-infra.yaml",
+      "values-redis-tester.yaml"
+    ]
+  }
+
+  # this should only be used for foundational bootstrapping secrets - we should just
+  # use ext-secrets from within an argo install for infrastructure components
+  secrets = [
+    {
+      name      = "redis-config"
+      namespace = "default"
+      data = {
+        token = var.redis_auth
+        host  = aws_elasticache_replication_group.redis.primary_endpoint_address
+        port  = aws_elasticache_replication_group.redis.port
+      }
+    }
+  ]
+
   nodeGroups = {
     default = {
       min_size        = 1

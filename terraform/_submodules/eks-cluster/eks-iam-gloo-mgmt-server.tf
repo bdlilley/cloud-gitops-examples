@@ -1,5 +1,5 @@
 module "iam-assumable-role-gloo-mgmt-server" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   create_role                   = true
   role_name                     = "${local.resourcePrefix}-${var.cluster.name}-gloo-mgmt-server"
   provider_url                  = replace(aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")

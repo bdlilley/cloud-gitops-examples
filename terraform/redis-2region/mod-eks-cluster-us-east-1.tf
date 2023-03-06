@@ -16,17 +16,13 @@ module "eks-us-east-1" {
   }
 
   argocd = {
-    enabled = true
-    apps = {
-      my-cluster = {
-        repo     = "https://github.com/bensolo-io/cloud-gitops-examples.git"
-        revision = "main"
-        path     = "argocd/argocd-aoa"
-        valueFiles = [
-          "values-aws-core-infra.yaml"
-        ]
-      }
-    }
+    name     = "aoa-${module.eks.eks.name}"
+    repo     = "https://github.com/bensolo-io/cloud-gitops-examples.git"
+    revision = "main"
+    path     = "argocd/argocd-aoa"
+    valueFiles = [
+      "values-aws-core-infra.yaml"
+    ]
   }
 
   nodeGroups = {

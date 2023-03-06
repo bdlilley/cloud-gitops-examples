@@ -9,9 +9,3 @@ module "us-east-2" {
   commonVpcConfigs = var.commonVpcConfigs
   region           = "us-east-2"
 }
-
-output "vpcs" {
-  value = {
-    "us-east-2" : module.us-east-2,
-  }
-}
