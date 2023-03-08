@@ -8,3 +8,4 @@ resources:
 - workspace.yaml
 - vg.yaml
 - httpbin.yaml
+- cloudprovider.yaml
