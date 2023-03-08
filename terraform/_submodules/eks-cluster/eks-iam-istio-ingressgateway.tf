@@ -4,7 +4,7 @@ module "iam-assumable-role-istio-ingressgateway" {
   role_name                     = "${local.resourcePrefix}-${var.cluster.name}-istio-ingressgateway"
   provider_url                  = replace(aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.istio-ingressgateway.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:gloo-mesh-gateways:istio-ingressgateway-service-account"]
+  oidc_subjects_with_wildcards = ["system:serviceaccount:gloo-mesh-gateways:istio-ingressgateway-*"]
 }
 
 resource "aws_iam_policy" "istio-ingressgateway" {

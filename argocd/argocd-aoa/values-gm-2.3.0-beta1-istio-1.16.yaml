@@ -10,7 +10,7 @@ charts:
     syncPolicy:
       syncOptions: [] # dont create namespace
     globalValues:
-      cluster: mgmt
+      cluster: mgmt-cluster
     values:
       # license secret created via terraform
       licenseSecretName: gloo-mesh-license
@@ -38,3 +38,31 @@ charts:
                 sidecar.istio.io/inject: "true"
               labels:
                 istio.io/rev: "1-16"
+
+  gloo-agent:
+    wave: 300
+    repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-agent
+    chart: gloo-mesh-agent
+    revision: v2.3.0-beta1
+    namespace: gloo-mesh
+    syncPolicy:
+      syncOptions: [] # dont create namespace
+    globalValues:
+      cluster: mgmt-cluster
+    values:
+      cluster: mgmt-cluster
+      relay:
+        serverAddress: "gloo-mesh-mgmt-server.gloo-mesh:9900"
+      metricscollector:
+        enabled: true
+        config:
+          exporters:
+            otlp:
+              endpoint: gloo-metrics-gateway.gloo-mesh.svc.cluster.local:4317
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1Gi
+          limits:
+            cpu: 600m
+            memory: 2Gi

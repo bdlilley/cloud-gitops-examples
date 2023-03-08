@@ -16,5 +16,5 @@ spec:
                   patches:
                     - path: metadata.annotations.eks\.amazonaws\.com/role-arn
                       value:
-                        arn:aws:iam::802411188784:role/gloo-mesh-e2e-role
+                        arn:aws:iam::931713665590:role/solo-v0-eks-1region-cluster-istio-ingressgateway
        
