@@ -38,7 +38,7 @@ spec:
                 overlays:
                 - apiVersion: v1
                   kind: ServiceAccount
-                  name: istio-ingressgateway-service-account
+                  name: istio-ingressgateway-1-16-service-account
                   patches:
                     - path: metadata.annotations.eks\.amazonaws\.com/role-arn
                       value:
