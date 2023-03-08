@@ -1,9 +1,9 @@
 charts: 
 
-  gloo-mesh-simple:
-    wave: 1000
-    repo: https://github.com/bensolo-io/cloud-gitops-examples.git
-    path: argocd/kustomize/gloo-mesh-simple/base
+  # gloo-mesh-simple:
+  #   wave: 1000
+  #   repo: https://github.com/bensolo-io/cloud-gitops-examples.git
+  #   path: argocd/kustomize/gloo-mesh-simple/base
 
   gloo-ilcm-simple:
     wave: 2000
