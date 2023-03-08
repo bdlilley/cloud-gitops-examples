@@ -1,0 +1,52 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: platform-config
+---
+apiVersion: admin.gloo.solo.io/v2
+kind: Workspace
+metadata:
+  name: platform
+  namespace: gloo-mesh
+  labels:
+    gloo.solo.io/team: 'platform'
+spec:
+  workloadClusters:
+  - name: 'mgmt-cluster'
+    namespaces:
+    - name: platform-config
+    - name: httpbin
+    - name: gloo-mesh
+    - name: gloo-mesh-gateways
+    - name: gloo-mesh-addons
+    - name: istio-system
+---
+apiVersion: admin.gloo.solo.io/v2
+kind: WorkspaceSettings
+metadata:
+  name: platform
+  namespace: platform-config
+spec:
+  # importFrom:          
+  # - workspaces:
+  #   - name: app1
+  #   - name: app2
+  # exportTo:             
+  # - workspaces:
+  #   - name: "*"
+  #   resources:
+  #   - kind: SERVICE
+  #     namespace: gloo-mesh-addons
+  #   - kind: VIRTUAL_DESTINATION
+  #     namespace: gloo-mesh-addons
+  options:
+    federation:                
+      enabled: false
+    eastWestGateways:      
+    - selector:
+        labels:
+          istio: eastwestgateway
+    serviceIsolation:     
+      enabled: true
+      trimProxyConfig: true

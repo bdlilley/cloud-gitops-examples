@@ -1,0 +1,14 @@
+apiVersion: networking.gloo.solo.io/v2
+kind: CloudProvider
+metadata:
+  name: aws-provider
+  namespace: gloo-mesh
+spec:
+  aws:
+    stsEndpoint: sts.amazonaws.com
+    accountId: "931713665590"
+    region: us-east-2
+    lambda:
+      invokeRoleName: solo-v0-eks-1region-cluster-istio-ingressgateway
+      discovery:
+        enabled: true
