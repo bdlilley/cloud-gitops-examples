@@ -3,3 +3,5 @@
 .vscode
 deploy
 deployment
+ben-hack
+*.tfplan

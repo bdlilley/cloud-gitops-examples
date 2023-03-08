@@ -35,6 +35,14 @@ spec:
                 istio: ingressgateway
                 app: istio-ingressgateway
               k8s:
+                overlays:
+                - apiVersion: v1
+                  kind: ServiceAccount
+                  name: istio-ingressgateway-service-account
+                  patches:
+                    - path: metadata.annotations.eks\.amazonaws\.com/role-arn
+                      value:
+                        arn:aws:iam::802411188784:role/gloo-mesh-e2e-role
                 service:
                   type: ClusterIP
                   selector:
