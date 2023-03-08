@@ -28,22 +28,22 @@ module "eks" {
     valueFiles = [
       "values-aws-core-infra.yaml",
       "values-gm-2.3.0-beta1-istio-1.16-SIMPLE.yaml",
-      "value-ben.yaml"
+      "values-ben.yaml"
     ]
   }
 
-  # this should only be used for foundational bootstrapping secrets - we should just
-  # use ext-secrets from within an argo install for infrastructure components
-  # secrets = [
-  #   {
-  #     name            = "redis-config"
-  #     namespace       = "snazzy"
-  #     createNamespace = true
-  #     data = {
-  #       token = "bar"
-  #     }
-  #   }
-  # ]
+  secrets = [
+    {
+      name            = "gloo-mesh-license"
+      namespace       = "gloo-mesh"
+      createNamespace = true
+      data = {
+        gloo-gateway-license-key         = var.GLOO_MESH_LICENSE_KEY
+        gloo-mesh-license-key            = var.GLOO_MESH_LICENSE_KEY
+        gloo-mesh-enterprise-license-key = var.GLOO_MESH_LICENSE_KEY
+      }
+    }
+  ]
 
   nodeGroups = {
     default = {

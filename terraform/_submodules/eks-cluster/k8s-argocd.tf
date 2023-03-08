@@ -62,13 +62,13 @@ resource "null_resource" "kubectl" {
   provisioner "local-exec" {
     command = local.kubectl
   }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<-EOD
-  aws eks update-kubeconfig --name ${self.triggers.cluster}
-  kubectl delete apps --all -n argocd
-  kubectl delete -f https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/install.yaml -n argocd
-  kubectl delete ns argocd
-  EOD
-  }
+  # provisioner "local-exec" {
+  #   when    = destroy
+  #   command = <<-EOD
+  # aws eks update-kubeconfig --name ${self.triggers.cluster}
+  # kubectl delete apps --all -n argocd
+  # kubectl delete -f https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/install.yaml -n argocd
+  # kubectl delete ns argocd
+  # EOD
+  # }
 }
