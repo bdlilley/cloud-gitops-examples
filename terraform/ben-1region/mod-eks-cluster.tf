@@ -31,18 +31,18 @@ module "eks" {
     ]
   }
 
-  # secrets = [
-  #   {
-  #     name            = "gloo-mesh-license"
-  #     namespace       = "gloo-mesh"
-  #     createNamespace = true
-  #     data = {
-  #       gloo-gateway-license-key         = var.GLOO_MESH_LICENSE_KEY
-  #       gloo-mesh-license-key            = var.GLOO_MESH_LICENSE_KEY
-  #       gloo-mesh-enterprise-license-key = var.GLOO_MESH_LICENSE_KEY
-  #     }
-  #   }
-  # ]
+  secrets = [
+    {
+      name            = "gloo-mesh-license"
+      namespace       = "gloo-mesh"
+      createNamespace = true
+      data = {
+        gloo-gateway-license-key         = var.GLOO_MESH_LICENSE_KEY
+        gloo-mesh-license-key            = var.GLOO_MESH_LICENSE_KEY
+        gloo-mesh-enterprise-license-key = var.GLOO_MESH_LICENSE_KEY
+      }
+    }
+  ]
 
   nodeGroups = {
     default = {
