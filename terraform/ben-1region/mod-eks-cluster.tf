@@ -27,8 +27,7 @@ module "eks" {
     path     = "argocd/argocd-aoa"
     valueFiles = [
       "values-aws-core-infra.yaml",
-      "values-gm-2.3.0-beta1-istio-1.16.yaml",
-      "values-gm-2.3.0-beta1-istio-1.16-SIMPLE.yaml"
+      "values-ben.yaml",
     ]
   }
 

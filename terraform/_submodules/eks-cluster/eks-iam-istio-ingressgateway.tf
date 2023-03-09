@@ -10,7 +10,7 @@ module "iam-assumable-role-istio-ingressgateway" {
 resource "aws_iam_policy" "istio-ingressgateway" {
   name        = "${local.resourcePrefix}-${var.cluster.name}-istio-ingressgateway"
   path        = "/"
-  description = "discover lambda functions"
+  description = "invoke lambda functions"
 
   policy = jsonencode(
     {
@@ -20,7 +20,7 @@ resource "aws_iam_policy" "istio-ingressgateway" {
           "Sid" : "VisualEditor0",
           "Effect" : "Allow",
           "Action" : [
-            "lambda:Invoke"
+            "lambda:InvokeFunction"
           ],
           "Resource" : ["*"]
         }

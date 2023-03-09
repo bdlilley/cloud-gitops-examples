@@ -42,7 +42,7 @@ spec:
                   patches:
                     - path: metadata.annotations.eks\.amazonaws\.com/role-arn
                       value:
-                        arn:aws:iam::931713665590:role/solo-v0-eks-1region-cluster-istio-ingressgateway
+                        arn:aws:iam::931713665590:role/solo-v0-ben-1region-cluster-istio-ingressgateway
                 service:
                   type: ClusterIP
                   selector:
