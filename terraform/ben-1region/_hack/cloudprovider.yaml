@@ -9,6 +9,6 @@ spec:
     accountId: "931713665590"
     region: us-east-2
     lambda:
-      invokeRoleName: solo-v0-eks-1region-cluster-istio-ingressgateway
+      invokeRoleName: solo-v0-ben-1region-cluster-istio-ingressgateway
       discovery:
         enabled: true
