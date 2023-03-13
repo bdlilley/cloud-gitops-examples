@@ -1,10 +1,13 @@
+description: |
+  Installs a single cluster GME and agent with no workspaces or kubernetes clusters
+
 charts:
 
   gloo-mesh-enterprise:
     wave: 200
     repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-enterprise
     chart: gloo-mesh-enterprise
-    revision: v2.3.0-beta1
+    revision: v2.3.0-beta2
     namespace: gloo-mesh
     syncPolicy:
       syncOptions: [] # dont create namespace
@@ -42,7 +45,7 @@ charts:
     wave: 300
     repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-agent
     chart: gloo-mesh-agent
-    revision: v2.3.0-beta1
+    revision: v2.3.0-beta2
     namespace: gloo-mesh
     syncPolicy:
       syncOptions: [] # dont create namespace
@@ -65,13 +68,3 @@ charts:
           limits:
             cpu: 600m
             memory: 2Gi
-
-  # gloo-mesh-simple:
-  #   wave: 1000
-  #   repo: https://github.com/bensolo-io/cloud-gitops-examples.git
-  #   path: argocd/kustomize/gloo-mesh-simple/base
-
-  # gloo-ilcm-simple:
-  #   wave: 2000
-  #   repo: https://github.com/bensolo-io/cloud-gitops-examples.git
-  #   path: argocd/kustomize/ilcm-simple/base
