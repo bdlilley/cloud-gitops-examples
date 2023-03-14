@@ -68,3 +68,25 @@ charts:
           limits:
             cpu: 600m
             memory: 2Gi
+
+
+  gloo-mesh-addons:
+    wave: 300
+    repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-agent
+    chart: gloo-mesh-agent
+    revision: v2.3.0-beta2
+    namespace: gloo-mesh-addons
+    # syncPolicy:
+    #   syncOptions: [] # dont create namespace
+    globalValues:
+      cluster: mgmt-cluster
+    values:
+      cluster: mgmt-cluster
+      relay:
+        serverAddress: "gloo-mesh-mgmt-server.gloo-mesh:9900"
+      rate-limiter:
+        enabled: true
+      ext-auth-service:
+        enabled: true
+      glooMeshAgent:
+        enabled: false
