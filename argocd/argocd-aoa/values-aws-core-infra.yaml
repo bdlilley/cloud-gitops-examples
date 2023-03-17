@@ -8,6 +8,7 @@ charts:
     revision: v1.9.1
     chart: cert-manager
     namespace: cert-manager
+    createNamespace: true
     values:
       installCRDs: true
 
@@ -17,8 +18,6 @@ charts:
     chart: aws-load-balancer-controller
     revision: "1.4.5"
     namespace: kube-system
-    syncPolicy:
-      syncOptions: [] # dont create namespace
     values:
       # cluster name set as a global value
       replicaCount: 1
@@ -30,6 +29,7 @@ charts:
     revision: "0.7.2"
     chart: external-secrets
     namespace: external-secrets
+    createNamespace: true
           
   # # external-dns to automate route53 records
   # external-dns:
@@ -39,8 +39,6 @@ charts:
   #   revision: "6.12.2"
   #   chart: external-dns
   #   namespace: kube-system
-  #   syncPolicy:
-  #     syncOptions: [] # dont create namespace
   #   values:
   #     domainFilters:
   #     - awscloud.solo.io

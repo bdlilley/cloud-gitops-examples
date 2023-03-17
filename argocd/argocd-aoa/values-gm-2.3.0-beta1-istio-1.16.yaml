@@ -7,8 +7,6 @@ charts:
     chart: gloo-mesh-enterprise
     revision: v2.3.0-beta1
     namespace: gloo-mesh
-    syncPolicy:
-      syncOptions: [] # dont create namespace
     globalValues:
       cluster: mgmt-cluster
     values:
@@ -45,8 +43,6 @@ charts:
     chart: gloo-mesh-agent
     revision: v2.3.0-beta1
     namespace: gloo-mesh
-    syncPolicy:
-      syncOptions: [] # dont create namespace
     globalValues:
       cluster: mgmt-cluster
     values:
