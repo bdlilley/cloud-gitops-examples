@@ -1,0 +1,41 @@
+
+  gloo-mesh-enterprise:
+    wave: 200
+    repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-enterprise
+    chart: gloo-mesh-enterprise
+    revision: v2.3.0-beta2
+    namespace: gloo-mesh
+    globalValues:
+      cluster: mgmt-cluster
+    values:
+      # license secret created via terraform
+      licenseSecretName: gloo-mesh-license
+      mgmtClusterName: mgmt-cluster
+      glooMeshMgmtServer:
+        serviceType: ClusterIP
+        serviceAnnotations:
+          service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+          service.beta.kubernetes.io/aws-load-balancer-type: external
+          service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+          service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+      legacyMetricsPipeline:
+        enabled: false
+      metricsgateway:
+        enabled: true
+        service:
+          type: ClusterIP
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1Gi
+          limits:
+            cpu: 600m
+            memory: 2Gi
+      deploymentOverrides:
+        spec:
+          template:
+            metadata:
+              annotations:
+                sidecar.istio.io/inject: "true"
+              labels:
+                istio.io/rev: "1-16"
