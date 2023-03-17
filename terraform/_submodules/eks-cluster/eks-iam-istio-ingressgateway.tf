@@ -23,6 +23,13 @@ resource "aws_iam_policy" "istio-ingressgateway" {
             "lambda:InvokeFunction"
           ],
           "Resource" : ["*"]
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "sts:assumeRole"
+          ],
+          "Resource" : ["*"]
         }
       ]
   })

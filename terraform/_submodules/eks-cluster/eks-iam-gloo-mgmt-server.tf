@@ -23,6 +23,13 @@ resource "aws_iam_policy" "gloo-mgmt-server" {
             "lambda:listFunctions"
           ],
           "Resource" : ["*"]
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "sts:assumeRole"
+          ],
+          "Resource" : ["*"]
         }
       ]
   })

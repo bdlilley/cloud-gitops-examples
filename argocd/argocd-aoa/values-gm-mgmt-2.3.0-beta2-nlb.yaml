@@ -1,4 +1,5 @@
 charts:
+
   gloo-mesh-enterprise:
     wave: 200
     repo: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-enterprise
@@ -13,11 +14,12 @@ charts:
       mgmtClusterName: mgmt-cluster
       glooMeshMgmtServer:
         serviceType: ClusterIP
-        serviceAnnotations:
-          service.beta.kubernetes.io/aws-load-balancer-scheme: internal
-          service.beta.kubernetes.io/aws-load-balancer-type: external
-          service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
-          service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+        # there is now way to pass these yet ...
+        # annotations:
+        #   service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+        #   service.beta.kubernetes.io/aws-load-balancer-type: external
+        #   service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+        #   service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
       legacyMetricsPipeline:
         enabled: false
       metricsgateway:

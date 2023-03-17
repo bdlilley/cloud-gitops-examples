@@ -4,7 +4,7 @@ locals {
   kubectl = <<EOT
 aws eks update-kubeconfig --name ${aws_eks_cluster.eks.name}
 kubectl create ns argocd
-kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/install.yaml -n argocd
+kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/${var.argocd.argocdVersion}/manifests/install.yaml -n argocd
 kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=argocd-server -n argocd
 kubectl apply -f - <<EOM
 ${local.manifest}
