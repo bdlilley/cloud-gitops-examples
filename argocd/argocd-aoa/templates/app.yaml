@@ -81,6 +81,10 @@ spec:
     {{- else }}
     namespace: argocd
     {{- end }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
-    - CreateNamespace={{ if ($chart).createNamespace }}{{ $chart.createNamespace }}{{ else }}{{  $root.Values.createNamespace }}{{end}}
+    - CreateNamespace={{ if ($chart).createNamespace }}{{ $chart.createNamespace }}{{ else }}{{ $root.Values.createNamespace }}{{ end }}
 {{- end }} 
