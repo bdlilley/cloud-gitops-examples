@@ -11,8 +11,8 @@ module "eks_managed_node_group" {
 
   subnet_ids = var.cluster.subnetIds
 
-  cluster_primary_security_group_id = each.value.commonClusterSg
-  vpc_security_group_ids            = var.cluster.securityGroupIds
+  cluster_primary_security_group_id = aws_eks_cluster.eks.vpc_config[0].cluster_security_group_id
+  vpc_security_group_ids            = concat(var.cluster.securityGroupIds, [each.value.commonClusterSg])
 
   min_size     = 1
   max_size     = 2
