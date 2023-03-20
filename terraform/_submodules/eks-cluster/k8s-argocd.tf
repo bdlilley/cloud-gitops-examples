@@ -2,7 +2,7 @@ locals {
   argoEnabled = var.argocd != null && var.argocd != {} && length(try(var.argocd.valueFiles, "0")) > 0
   theContext = aws_eks_cluster.eks.arn
   kubectl = <<EOT
-KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} aws eks update-kubeconfig --name ${aws_eks_cluster.eks.name}
+aws eks update-kubeconfig --name ${aws_eks_cluster.eks.name}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl create ns argocd --context ${local.theContext}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/${try(var.argocd.argocdVersion, "v2.6.6")}/manifests/install.yaml -n argocd --context ${local.theContext}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=argocd-server -n argocd --context ${local.theContext}
