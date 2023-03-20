@@ -22,6 +22,7 @@ resource "null_resource" "secrets" {
         cluster = aws_eks_cluster.eks.name
         namespace = each.value.namespace
         name = each.value.name
+        arn = aws_eks_cluster.eks.arn
   }
 
   # external commands are required to keep the eks cluster creation and k8s resource creation 
@@ -41,7 +42,7 @@ EOC
     when    = destroy
     command = <<-EOD
 aws eks update-kubeconfig --name ${self.triggers.cluster}
-kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${local.theContext} || true
+kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${self.triggers.arn} || true
   EOD
   }
 }
