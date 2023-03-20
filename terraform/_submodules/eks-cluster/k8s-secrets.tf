@@ -41,8 +41,8 @@ EOC
   provisioner "local-exec" {
     when    = destroy
     command = <<-EOD
-aws eks update-kubeconfig --name ${self.triggers.cluster}
-kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${self.triggers.arn} || true
+KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} aws eks update-kubeconfig --name ${self.triggers.cluster}
+KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${self.triggers.arn} || true
   EOD
   }
 }
