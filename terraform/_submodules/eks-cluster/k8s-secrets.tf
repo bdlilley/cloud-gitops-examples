@@ -31,9 +31,9 @@ resource "null_resource" "secrets" {
   # reach your cluster unless you point epxlicitly to local kubeconfig
   provisioner "local-exec" {
     command = <<-EOC
-aws eks update-kubeconfig --name ${self.triggers.cluster}
+KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} aws eks update-kubeconfig --name ${self.triggers.cluster}
 %{if try(each.value.createNamespace, false)}kubectl create namespace ${each.value.namespace} || true %{endif}
-kubectl apply --context ${local.theContext} -f - <<EOT
+KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply --context ${local.theContext} -f - <<EOT
 ${each.value.yaml}
 EOT
 EOC
