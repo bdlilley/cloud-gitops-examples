@@ -21,7 +21,7 @@ EOT
       path       = try(var.argocd.path, "")
       revision   = try(var.argocd.revision, "")
       valueFiles = try(var.argocd.valueFiles, [])
-      values = try(yamldecode(<<EOT
+      values = try(merge(try(var.argocd.values, {}), yamldecode(<<EOT
     global:
       external-secrets:
         serviceAccount:
@@ -42,7 +42,7 @@ EOT
             extraAnnotations:
               eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
 EOT
-  ), "") })
+  )), "") })
 
 
 }
