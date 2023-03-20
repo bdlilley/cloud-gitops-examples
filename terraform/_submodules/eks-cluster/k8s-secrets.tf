@@ -32,7 +32,7 @@ resource "null_resource" "secrets" {
     command = <<-EOC
 aws eks update-kubeconfig --name ${self.triggers.cluster}
 %{if try(each.value.createNamespace, false)}kubectl create namespace ${each.value.namespace} || true %{endif}
-kubectl apply -f - <<EOT
+kubectl apply --context ${local.theContext} -f - <<EOT
 ${each.value.yaml}
 EOT
 EOC
@@ -41,7 +41,7 @@ EOC
     when    = destroy
     command = <<-EOD
 aws eks update-kubeconfig --name ${self.triggers.cluster}
-kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} || true
+kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${local.theContext} || true
   EOD
   }
 }
