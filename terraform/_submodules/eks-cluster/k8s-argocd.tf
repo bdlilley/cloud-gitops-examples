@@ -51,7 +51,7 @@ global:
           eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
 EOT
   ),
-    yamldecode(try(var.argocd.values, {})),
+    yamldecode(try(var.argocd.values, "nothing: nil")),
   ]
 }
 
