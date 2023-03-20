@@ -61,6 +61,11 @@ if [ "$1" == "show" ]; then
     exit $?
 fi
 
+if [ "$1" == "get" ]; then
+    terraform $@
+    exit $?
+fi
+
 if [[ "$1" == "plan" || "$1" == "apply" ]]; then
     terraform fmt
     if [ "$?" -ne 0 ]; then
