@@ -2,7 +2,7 @@ locals {
   secrets = { for s in var.secrets: "${s.name}-${s.namespace}" => merge(s, {
     "yaml" = <<-EOT
 apiVersion: v1
-${yamlencode({stringData: s.data})}
+${yamlencode({ lookup(s, "encoded", false) ? "data" : "stringData": s.data})}
 kind: Secret
 metadata:
   name: ${s.name}
