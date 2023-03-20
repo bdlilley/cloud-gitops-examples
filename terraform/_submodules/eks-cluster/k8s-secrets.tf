@@ -7,7 +7,7 @@ kind: Secret
 metadata:
   name: ${s.name}
   namespace: ${s.namespace}
-type: Opaque
+type: ${try(s.type, "Opaque")}
 EOT
   }) }
 
