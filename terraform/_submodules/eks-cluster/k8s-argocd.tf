@@ -21,7 +21,15 @@ EOT
       path       = try(var.argocd.path, "")
       revision   = try(var.argocd.revision, "")
       valueFiles = try(var.argocd.valueFiles, [])
-      values = try(merge(try(var.argocd.values, {}), yamldecode(<<EOT
+      values = module.deepmerge.merged
+    })
+}
+
+
+module "deepmerge" {
+  source = "git::https://github.com/cloudposse/terraform-yaml-config.git//modules/deepmerge"
+  maps = [
+yamldecode(<<EOT
 global:
   external-secrets:
     serviceAccount:
@@ -42,11 +50,10 @@ global:
         extraAnnotations:
           eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
 EOT
-  )), "") })
-
-
+  ),
+    yamldecode(try(var.argocd.values, {})),
+  ]
 }
-
 
 resource "null_resource" "kubectl" {
   count = local.argoEnabled ? 1 : 0
