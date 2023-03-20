@@ -22,25 +22,25 @@ EOT
       revision   = try(var.argocd.revision, "")
       valueFiles = try(var.argocd.valueFiles, [])
       values = try(merge(try(var.argocd.values, {}), yamldecode(<<EOT
-    global:
-      external-secrets:
-        serviceAccount:
-          create: true
-          name: external-secrets
-          annotations:
-            eks.amazonaws.com/role-arn: ${module.iam-assumable-role-ext-secrets.iam_role_arn}
-      aws-load-balancer-controller:
-        clusterName: ${aws_eks_cluster.eks.name}
-        serviceAccount:
-          create: true
-          name: aws-load-balancer-controller
-          annotations:
-            eks.amazonaws.com/role-arn: ${module.iam-assumable-role-aws-lb-controller.iam_role_arn}
-      gloo-mesh-enterprise:
-        glooMeshMgmtServer:
-          serviceAccount:
-            extraAnnotations:
-              eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
+global:
+  external-secrets:
+    serviceAccount:
+      create: true
+      name: external-secrets
+      annotations:
+        eks.amazonaws.com/role-arn: ${module.iam-assumable-role-ext-secrets.iam_role_arn}
+  aws-load-balancer-controller:
+    clusterName: ${aws_eks_cluster.eks.name}
+    serviceAccount:
+      create: true
+      name: aws-load-balancer-controller
+      annotations:
+        eks.amazonaws.com/role-arn: ${module.iam-assumable-role-aws-lb-controller.iam_role_arn}
+  gloo-mesh-enterprise:
+    glooMeshMgmtServer:
+      serviceAccount:
+        extraAnnotations:
+          eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
 EOT
   )), "") })
 
