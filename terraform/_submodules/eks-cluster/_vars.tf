@@ -36,6 +36,7 @@ variable "secrets" {
 }
 
 variable "nodeGroups" {
+  default = {}
 }
 
 locals {
