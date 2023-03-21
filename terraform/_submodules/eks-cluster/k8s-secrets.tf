@@ -38,13 +38,13 @@ ${each.value.yaml}
 EOT
 EOC
   }
-  provisioner "local-exec" {
-    when    = destroy
-    command = <<-EOD
-KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} aws eks update-kubeconfig --name ${self.triggers.cluster}
-KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${self.triggers.arn} || true
-  EOD
-  }
+#   provisioner "local-exec" {
+#     when    = destroy
+#     command = <<-EOD
+# KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} aws eks update-kubeconfig --name ${self.triggers.cluster}
+# KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${self.triggers.arn} || true
+#   EOD
+#   }
 }
 
 # locals {
