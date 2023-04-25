@@ -52,7 +52,7 @@ global:
         extraAnnotations:
           eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
 
-  gloo-platform
+  gloo-platform:
     glooMgmtServer:
       serviceAccount:
         extraAnnotations:
