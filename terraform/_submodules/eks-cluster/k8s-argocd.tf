@@ -1,5 +1,5 @@
 locals {
-  argoEnabled = var.argocd != null && var.argocd != {} && length(try(var.argocd.valueFiles, "0")) > 0
+  argoEnabled = var.argocd != null && var.argocd != {} && (length(try(var.argocd.valueFiles, "0")) > 0 || try(var.argocd.values != "" , false) == true)
   theContext = aws_eks_cluster.eks.arn
   kubectl = <<EOT
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} aws eks update-kubeconfig --name ${aws_eks_cluster.eks.name}
