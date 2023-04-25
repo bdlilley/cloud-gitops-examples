@@ -19,7 +19,7 @@ resource "aws_subnet" "private" {
   availability_zone_id = try(each.value.zoneId, null)
 
   tags = {
-    Name                              = "${local.resourcePrefix}-private-${try(each.value.zoneId, null)}"
+    Name                              = "${local.resourcePrefix}-private-${try(each.value.zoneId, "")}"
     "kubernetes.io/role/internal-elb" = 1
   }
 }
@@ -36,7 +36,7 @@ resource "aws_subnet" "public" {
   availability_zone_id = try(each.value.zoneId, null)
 
   tags = {
-    Name = "${local.resourcePrefix}-public-${try(each.value.zoneId, null)}"
+    Name = "${local.resourcePrefix}-public-${try(each.value.zoneId, "")}"
   }
 }
 
