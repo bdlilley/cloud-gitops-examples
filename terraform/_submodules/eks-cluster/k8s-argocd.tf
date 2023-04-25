@@ -37,6 +37,7 @@ global:
       name: external-secrets
       annotations:
         eks.amazonaws.com/role-arn: ${module.iam-assumable-role-ext-secrets.iam_role_arn}
+
   aws-load-balancer-controller:
     clusterName: ${aws_eks_cluster.eks.name}
     serviceAccount:
@@ -44,11 +45,19 @@ global:
       name: aws-load-balancer-controller
       annotations:
         eks.amazonaws.com/role-arn: ${module.iam-assumable-role-aws-lb-controller.iam_role_arn}
+
   gloo-mesh-enterprise:
     glooMeshMgmtServer:
       serviceAccount:
         extraAnnotations:
           eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
+
+  gloo-platform
+    glooMgmtServer:
+      serviceAccount:
+          extraAnnotations:
+            eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
+
 EOT
   ),
     yamldecode(try(var.argocd.values, "nothing: nil")),
