@@ -16,7 +16,7 @@ EOT
   manifest = templatefile(
     "${path.module}/app.tftpl",
     {
-      name       = aws_eks_cluster.eks.name
+      name       = replace(aws_eks_cluster.eks.name, "_", "-")
       repo       = try(var.argocd.repo, "")
       path       = try(var.argocd.path, "")
       revision   = try(var.argocd.revision, "")
