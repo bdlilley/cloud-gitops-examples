@@ -31,7 +31,7 @@ resource "null_resource" "secrets" {
   # reach your cluster unless you point epxlicitly to local kubeconfig
   provisioner "local-exec" {
     command = <<-EOC
-KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} aws eks update-kubeconfig --name ${self.triggers.cluster} --region ${data.aws_region.current.name}
+KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} aws eks update-kubeconfig --name ${self.triggers.cluster}
 %{if try(each.value.createNamespace, false)}KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl create namespace ${each.value.namespace} || true %{endif}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply --context ${local.theContext} -f - <<EOT
 ${each.value.yaml}
@@ -41,7 +41,7 @@ EOC
   provisioner "local-exec" {
     when    = destroy
     command = <<-EOD
-KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} aws eks update-kubeconfig --name ${self.triggers.cluster} --region ${data.aws_region.current.name}
+KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} aws eks update-kubeconfig --name ${self.triggers.cluster}
 KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${self.triggers.arn} || true
   EOD
   }
