@@ -35,6 +35,10 @@ variable "secrets" {
   default = []
 }
 
+variable "remoteAccess" {
+  default = {}
+}
+
 variable "nodeGroups" {
   default = {}
 }
