@@ -45,10 +45,10 @@ output "publicSubnets" {
 }
 
 resource "aws_vpc_endpoint" "interface" {
-  for_each = { for i, val in var.commonVpcConfigs.interfaceEndpoints : i => val }
+  for_each = { for i, val in var.commonVpcConfigs.interfaceEndpoints : val => 1 }
 
   vpc_id            = aws_vpc.vpc.id
-  service_name      = "com.amazonaws.${var.region}.${each.value}"
+  service_name      = "com.amazonaws.${var.region}.${each.key}"
   vpc_endpoint_type = "Interface"
   subnet_ids        = [for sn in aws_subnet.private : sn.id]
   security_group_ids = [
@@ -89,18 +89,18 @@ output "interfaceSecurityGroup" {
 }
 
 resource "aws_vpc_endpoint" "gateway" {
-  for_each = { for i, val in var.commonVpcConfigs.gatewayEndpoints : i => val }
+  for_each = { for i, val in var.commonVpcConfigs.gatewayEndpoints : val => 1 }
 
   vpc_id            = aws_vpc.vpc.id
-  service_name      = "com.amazonaws.${var.region}.${each.value}"
+  service_name      = "com.amazonaws.${var.region}.${each.key}"
   vpc_endpoint_type = "Gateway"
 }
 
 resource "aws_vpc_endpoint_route_table_association" "gateway" {
-  for_each = { for i, val in var.commonVpcConfigs.gatewayEndpoints : i => val }
+  for_each = { for i, val in var.commonVpcConfigs.gatewayEndpoints : val => 1 }
 
   route_table_id  = aws_route_table.private.id
-  vpc_endpoint_id = aws_vpc_endpoint.gateway[each.key].id
+  vpc_endpoint_id = aws_vpc_endpoint.gateway[each.val].id
 }
 
 resource "aws_internet_gateway" "gw" {
