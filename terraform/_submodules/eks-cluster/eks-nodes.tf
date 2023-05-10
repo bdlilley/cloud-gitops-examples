@@ -4,7 +4,7 @@ module "eks_managed_node_group" {
 
   source = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
 
-  name = substr("${var.moduleName}-${each.key}", 0, 14) 
+  name = substr("${var.moduleName}-${each.key}", 0, 14)
 
   cluster_name    = aws_eks_cluster.eks.name
   cluster_version = aws_eks_cluster.eks.version

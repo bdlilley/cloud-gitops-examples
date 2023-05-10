@@ -1,8 +1,8 @@
 locals {
-  secrets = { for s in var.secrets: "${s.name}-${s.namespace}" => merge(s, {
+  secrets = { for s in var.secrets : "${s.name}-${s.namespace}" => merge(s, {
     "yaml" = <<-EOT
 apiVersion: v1
-${yamlencode({ lookup(s, "encoded", false) ? "data" : "stringData": s.data})}
+${yamlencode({ lookup(s, "encoded", false) ? "data" : "stringData" : s.data })}
 kind: Secret
 metadata:
   name: ${s.name}
@@ -18,11 +18,11 @@ resource "null_resource" "secrets" {
   for_each = local.secrets
 
   triggers = {
-    hash    = sha1(each.value.yaml)
-        cluster = aws_eks_cluster.eks.name
-        namespace = each.value.namespace
-        name = each.value.name
-        arn = aws_eks_cluster.eks.arn
+    hash      = sha1(each.value.yaml)
+    cluster   = aws_eks_cluster.eks.name
+    namespace = each.value.namespace
+    name      = each.value.name
+    arn       = aws_eks_cluster.eks.arn
   }
 
   # external commands are required to keep the eks cluster creation and k8s resource creation 

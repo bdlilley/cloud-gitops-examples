@@ -1,7 +1,7 @@
 locals {
-  argoEnabled = var.argocd != null && var.argocd != {} && (length(try(var.argocd.valueFiles, "0")) > 0 || try(var.argocd.values != "" , false) == true)
-  theContext = aws_eks_cluster.eks.arn
-  kubectl = <<EOT
+  argoEnabled = var.argocd != null && var.argocd != {} && (length(try(var.argocd.valueFiles, "0")) > 0 || try(var.argocd.values != "", false) == true)
+  theContext  = aws_eks_cluster.eks.arn
+  kubectl     = <<EOT
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} aws eks update-kubeconfig --name ${aws_eks_cluster.eks.name}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl create ns argocd --context ${local.theContext}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/${try(var.argocd.argocdVersion, "v2.6.7")}/manifests/install.yaml -n argocd --context ${local.theContext}
@@ -21,15 +21,15 @@ EOT
       path       = try(var.argocd.path, "")
       revision   = try(var.argocd.revision, "")
       valueFiles = try(var.argocd.valueFiles, [])
-      values = module.deepmerge.merged
-    })
+      values     = module.deepmerge.merged
+  })
 }
 
 
 module "deepmerge" {
   source = "git::https://github.com/cloudposse/terraform-yaml-config.git//modules/deepmerge"
   maps = [
-yamldecode(<<EOT
+    yamldecode(<<EOT
 global:
   external-secrets:
     serviceAccount:
@@ -59,7 +59,7 @@ global:
           eks.amazonaws.com/role-arn: ${module.iam-assumable-role-gloo-mgmt-server.iam_role_arn}
 
 EOT
-  ),
+    ),
     yamldecode(try(var.argocd.values, "nothing: nil")),
   ]
 }
