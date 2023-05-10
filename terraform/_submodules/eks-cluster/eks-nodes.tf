@@ -20,6 +20,11 @@ module "eks_managed_node_group" {
 
   instance_types = each.value.instance_types
 
+  iam_role_additional_policies = {
+    ssmcore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    ssmfull = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+  }
+
   labels = {
     stackVersion = var.stackVersion
   }
