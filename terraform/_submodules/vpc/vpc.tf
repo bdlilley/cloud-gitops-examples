@@ -100,7 +100,7 @@ resource "aws_vpc_endpoint_route_table_association" "gateway" {
   for_each = { for i, val in var.commonVpcConfigs.gatewayEndpoints : val => 1 }
 
   route_table_id  = aws_route_table.private.id
-  vpc_endpoint_id = aws_vpc_endpoint.gateway[each.value].id
+  vpc_endpoint_id = aws_vpc_endpoint.gateway[each.key].id
 }
 
 resource "aws_internet_gateway" "gw" {
