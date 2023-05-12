@@ -18,6 +18,8 @@ module "eks_managed_node_group" {
   max_size     = 2
   desired_size = 1
 
+  key_name = var.cluster.keyName
+
   # remote_access = var.remoteAccess
 
   instance_types = each.value.instance_types
