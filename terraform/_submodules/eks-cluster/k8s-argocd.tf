@@ -33,7 +33,7 @@ kind: Kustomization
 
 resources:
 # base Argo CD components
-- https://raw.githubusercontent.com/argoproj/argo-cd/${try(var.argocd.argocdVersion, "v2.7.6")}/manifests/ha/install.yaml
+- https://raw.githubusercontent.com/argoproj/argo-cd/${try(var.argocd.argocdVersion, "v2.7.6")}/manifests/install.yaml
 
 components:
 # extensions controller component
