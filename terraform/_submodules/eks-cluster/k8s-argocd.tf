@@ -4,7 +4,7 @@ locals {
   kubectl     = <<EOT
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} aws eks update-kubeconfig --name ${aws_eks_cluster.eks.name}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl create ns argocd --context ${local.theContext}
-KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl --context ${local.theContext} apply -k ${path.module}/kustomize-argocd/
+KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl --context ${local.theContext} -n argocd apply -k ${path.module}/kustomize-argocd/
 # KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/${try(var.argocd.argocdVersion, "v2.7.6")}/manifests/install.yaml -n argocd --context ${local.theContext}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=argocd-server -n argocd --context ${local.theContext}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply --context ${local.theContext} -f - <<EOM
