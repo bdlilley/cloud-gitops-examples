@@ -7,7 +7,7 @@ KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl create ns argocd -
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl --context ${local.theContext} -n argocd apply -k ${path.module}/kustomize-argocd/
 # KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/${try(var.argocd.argocdVersion, "v2.7.6")}/manifests/install.yaml -n argocd --context ${local.theContext}
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=argocd-server -n argocd --context ${local.theContext}
-KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply -n argocd  --context ${local.theContext} -f https://raw.githubusercontent.com/argoproj-labs/rollout-extension/${try(var.argocd.argocdVersion, "v0.2.1")}/manifests/install.yaml
+KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply -n argocd  --context ${local.theContext} -f https://raw.githubusercontent.com/argoproj-labs/rollout-extension/${try(var.argocd.argocdExtensionsVersion, "v0.2.1")}/manifests/install.yaml
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} kubectl apply --context ${local.theContext} -f - <<EOM
 ${local.manifest}
 EOM
