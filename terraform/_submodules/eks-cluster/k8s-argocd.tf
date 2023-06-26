@@ -37,7 +37,7 @@ resources:
 
 components:
 # extensions controller component
-- https://github.com/argoproj-labs/argocd-extensions/${try(var.argocd.argocdExtensionsVersion, "v0.2.1")}/manifests
+- https://github.com/argoproj-labs/argocd-extensions/manifests
 
 EOK
 
