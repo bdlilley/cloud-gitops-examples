@@ -37,6 +37,7 @@ resource "aws_subnet" "public" {
 
   tags = {
     Name = "${local.resourcePrefix}-public-${try(each.value.zoneId, "")}"
+    "kubernetes.io/role/elb" = 1
   }
 }
 
