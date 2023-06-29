@@ -16,10 +16,10 @@ resource "aws_subnet" "private" {
 
   vpc_id               = aws_vpc.vpc.id
   cidr_block           = each.value.cidr
-  availability_zone_id = try(each.value.zoneId, null)
+  availability_zone_id = each.value.zoneId
 
   tags = {
-    Name                              = "${local.resourcePrefix}-private-${try(each.value.zoneId, "")}"
+    Name                              = "${local.resourcePrefix}-private-${each.value.zoneId}"
     "kubernetes.io/role/internal-elb" = 1
   }
 }
@@ -33,10 +33,10 @@ resource "aws_subnet" "public" {
 
   vpc_id               = aws_vpc.vpc.id
   cidr_block           = each.value.cidr
-  availability_zone_id = try(each.value.zoneId, null)
+  availability_zone_id = each.value.zoneId
 
   tags = {
-    Name = "${local.resourcePrefix}-public-${try(each.value.zoneId, "")}"
+    Name = "${local.resourcePrefix}-public-${each.value.zoneId}"
     "kubernetes.io/role/elb" = 1
   }
 }
