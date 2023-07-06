@@ -23,6 +23,7 @@ resource "null_resource" "secrets" {
     namespace = each.value.namespace
     name      = each.value.name
     arn       = aws_eks_cluster.eks.arn
+    region = var.region
   }
 
   # external commands are required to keep the eks cluster creation and k8s resource creation 
@@ -31,9 +32,9 @@ resource "null_resource" "secrets" {
   # reach your cluster unless you point epxlicitly to local kubeconfig
   provisioner "local-exec" {
     command = <<-EOC
-KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} AWS_REGION=${var.region} aws eks update-kubeconfig --name ${self.triggers.cluster} --region ${var.region}
-%{if try(each.value.createNamespace, false)}KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} AWS_REGION=${var.region}  kubectl create namespace ${each.value.namespace}  || true %{endif}
-KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} AWS_REGION=${var.region}  kubectl apply --context ${local.theContext} -f - <<EOT
+KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} AWS_REGION=${self.triggers.region} aws eks update-kubeconfig --name ${self.triggers.cluster} 
+%{if try(each.value.createNamespace, false)}KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} AWS_REGION=${self.triggers.region}  kubectl create namespace ${each.value.namespace}  || true %{endif}
+KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} AWS_REGION=${self.triggers.region}  kubectl apply --context ${local.theContext} -f - <<EOT
 ${each.value.yaml}
 EOT
 EOC
@@ -41,8 +42,8 @@ EOC
   provisioner "local-exec" {
     when    = destroy
     command = <<-EOD
-KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} AWS_REGION=${var.region}  aws eks update-kubeconfig --name ${self.triggers.cluster}
-KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} AWS_REGION=${var.region}  kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${self.triggers.arn} || true
+KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} AWS_REGION=${self.triggers.region}  aws eks update-kubeconfig --name ${self.triggers.cluster}
+KUBECONFIG=$${HOME}/.kube/${self.triggers.cluster} AWS_REGION=${self.triggers.region} kubectl delete secret ${self.triggers.name} -n ${self.triggers.namespace} --context ${self.triggers.arn} || true
   EOD
   }
 }
