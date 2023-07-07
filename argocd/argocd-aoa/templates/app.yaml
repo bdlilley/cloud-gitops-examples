@@ -82,9 +82,11 @@ spec:
     namespace: argocd
     {{- end }}
   syncPolicy:
+    {{- if  not ($chart).disableAutoSync }}
     automated:
       prune: true
       selfHeal: true
+    {{- end }}
     syncOptions:
     - CreateNamespace={{ if ($chart).createNamespace }}{{ $chart.createNamespace }}{{ else }}{{ $root.Values.createNamespace }}{{ end }}
 {{- end }} 
