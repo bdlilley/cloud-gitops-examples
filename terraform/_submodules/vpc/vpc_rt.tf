@@ -1,14 +1,20 @@
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
-  }
+  # route {
+  #   cidr_block = "0.0.0.0/0"
+  #   gateway_id = aws_internet_gateway.gw.id
+  # }
 
   tags = {
     Name = "${local.resourcePrefix}-public"
   }
+}
+
+resource "aws_route" "public1" {
+  route_table_id            = aws_route_table.public.id
+  destination_cidr_block    = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.gw.id
 }
 
 resource "aws_route_table_association" "public" {
@@ -20,14 +26,20 @@ resource "aws_route_table_association" "public" {
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
 
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat1.id
-  }
+  # route {
+  #   cidr_block     = "0.0.0.0/0"
+  #   nat_gateway_id = aws_nat_gateway.nat1.id
+  # }
 
   tags = {
     Name = "${local.resourcePrefix}-private"
   }
+}
+
+resource "aws_route" "private1" {
+  route_table_id            = aws_route_table.private.id
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id = aws_nat_gateway.nat1.id
 }
 
 resource "aws_route_table_association" "private" {
