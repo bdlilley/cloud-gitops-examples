@@ -11,11 +11,11 @@ resource "aws_route_table" "public" {
   }
 }
 
-# resource "aws_route" "public1" {
-#   route_table_id            = aws_route_table.public.id
-#   destination_cidr_block    = "0.0.0.0/0"
-#   gateway_id = aws_internet_gateway.gw.id
-# }
+resource "aws_route" "public1" {
+  route_table_id            = aws_route_table.public.id
+  destination_cidr_block    = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.gw.id
+}
 
 resource "aws_route_table_association" "public" {
   for_each       = { for i, sn in var.vpcConfig.publicNets : i => sn }
@@ -36,11 +36,11 @@ resource "aws_route_table" "private" {
   }
 }
 
-# resource "aws_route" "private1" {
-#   route_table_id            = aws_route_table.private.id
-#   destination_cidr_block    = "0.0.0.0/0"
-#   nat_gateway_id = aws_nat_gateway.nat1.id
-# }
+resource "aws_route" "private1" {
+  route_table_id            = aws_route_table.private.id
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id = aws_nat_gateway.nat1.id
+}
 
 resource "aws_route_table_association" "private" {
   for_each       = { for i, sn in var.vpcConfig.privateNets : i => sn }
