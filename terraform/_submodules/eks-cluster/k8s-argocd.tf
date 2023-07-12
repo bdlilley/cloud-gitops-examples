@@ -1,5 +1,5 @@
 locals {
-  argoEnabled = var.argocd != null && var.argocd != {} && (length(try(var.argocd.valueFiles, "0")) > 0 || try(var.argocd.values != "", false) == true)
+  argoEnabled = var.argocd.enabled && var.argocd.name != "" // var.argocd != null && var.argocd != {} && (length(try(var.argocd.valueFiles, "0")) > 0 || try(var.argocd.values != "", false) == true)
   theContext  = aws_eks_cluster.eks.arn
   kubectl     = <<EOT
 KUBECONFIG=$${HOME}/.kube/${aws_eks_cluster.eks.name} AWS_REGION=${var.region} aws eks update-kubeconfig --region ${var.region}  --name ${aws_eks_cluster.eks.name}
@@ -87,7 +87,9 @@ EOT
 }
 
 resource "null_resource" "kubectl" {
-  count = local.argoEnabled ? 1 : 0
+  # count = local.argoEnabled ? 1 : 0
+  for_each = local.argoEnabled ? {"enabled": 1} : {}
+  
   triggers = {
     hash    = local.kubectlTrigger
     cluster = aws_eks_cluster.eks.name

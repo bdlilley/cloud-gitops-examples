@@ -27,6 +27,8 @@ variable "argocd" {
   #   valueFiles = optional(list(string))
   # })
   default = {
+    name = ""
+    enabled = true
     valueFiles = []
   }
 }
