@@ -1,5 +1,5 @@
 resource "aws_eks_cluster" "eks" {
-  name     = "${local.resourcePrefix}-${var.cluster.name}"
+  name     = "${var.resourcePrefix}-${var.cluster.name}"
   role_arn = aws_iam_role.eks.arn
 
   version = var.cluster.version
@@ -24,6 +24,6 @@ output "eks" {
 }
 
 resource "aws_cloudwatch_log_group" "eks" {
-  name              = "/aws/eks/${local.resourcePrefix}-${var.cluster.name}/cluster"
+  name              = "/aws/eks/${var.resourcePrefix}-${var.cluster.name}/cluster"
   retention_in_days = 7
 }

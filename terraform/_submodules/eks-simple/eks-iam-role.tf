@@ -1,5 +1,5 @@
 resource "aws_iam_role" "eks" {
-  name = "${local.resourcePrefix}-${var.cluster.name}-control-plane"
+  name = "${var.resourcePrefix}-${var.cluster.name}-control-plane"
 
   assume_role_policy = <<POLICY
 {

@@ -1,19 +1,9 @@
-variable "moduleName" {
-  type        = string
-  description = "name of current module, used in all resource names"
-}
-
-variable "stackVersion" {
-  type        = string
-  description = "version string used in all stack resource names"
-}
-
 variable "tags" {
-  default = {
-    "created-by" = "benji_lilley"
-    "team"       = "product"
-    "purpose"    = "product-development"
-  }
+  # default = {
+  #   "created-by" = "benji_lilley"
+  #   "team"       = "product"
+  #   "purpose"    = "product-development"
+  # }
 }
 
 variable "region" {
@@ -30,6 +20,7 @@ variable "nodeGroups" {
   default = {}
 }
 
-locals {
-  resourcePrefix = "${var.stackVersion}-${var.moduleName}"
+variable "resourcePrefix" {
+  type        = string
+  description = "name of current module, used in all resource names"
 }
