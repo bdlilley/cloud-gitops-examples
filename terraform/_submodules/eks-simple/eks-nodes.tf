@@ -30,6 +30,6 @@ module "eks_managed_node_group" {
   }
 
   labels = {
-    stackVersion = var.stackVersion
+    resourcePrefix = var.resourcePrefix
   }
 }
