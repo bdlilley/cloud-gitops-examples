@@ -15,9 +15,9 @@ variable "tags" {
   # }
 }
 
-# variable "region" {
+variable "region" {
 
-# }
+}
 
 variable "commonVpcConfigs" {
 
