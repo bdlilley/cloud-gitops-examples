@@ -6,8 +6,8 @@ variable "tags" {
   # }
 }
 
-variable "region" {
-}
+# variable "region" {
+# }
 
 variable "cluster" {
 }
