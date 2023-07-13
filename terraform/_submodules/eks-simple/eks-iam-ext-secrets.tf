@@ -5,7 +5,7 @@ module "iam-assumable-role-ext-secrets" {
   role_name                     = "${var.resourcePrefix}-${var.cluster.name}-ext-secrets"
   provider_url                  = replace(aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.ext-secrets.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:external-secrets:external-secrets"]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:external-secrets"]
 }
 
 resource "aws_iam_policy" "ext-secrets" {

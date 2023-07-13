@@ -5,7 +5,7 @@ module "iam-assumable-role-ext-dns" {
   role_name                     = "${var.resourcePrefix}-${var.cluster.name}-ext-dns"
   provider_url                  = replace(aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.ext-dns.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:external-dns:external-dns"]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:external-dns"]
 }
 
 resource "aws_iam_policy" "ext-dns" {
