@@ -48,6 +48,6 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
-output "routeTables" {
-  value = [aws_route_table.public, aws_route_table.private]
+output "routeTablesIds" {
+  value = [aws_route_table.public.id, aws_route_table.private.id]
 }
