@@ -49,8 +49,5 @@ resource "aws_route_table_association" "private" {
 }
 
 output "routeTables" {
-  value = {
-    public = aws_route_table.public
-    private = aws_route_table.private
-  }
+  value = [aws_route_table.public, aws_route_table.private]
 }
