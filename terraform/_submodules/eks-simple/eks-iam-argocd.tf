@@ -1,3 +1,4 @@
+# this role has no policies attached; it's only used to map to k8s RBAC within the cluster
 module "iam-assumable-role-argocd" {
   source                       = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   create_role                  = true
