@@ -35,6 +35,5 @@ module "eks_managed_node_group" {
 }
 
 output "nodegroups" {
-  for_each = var.nodeGroups
-  value = eks_managed_node_group[each.key]
+  value = eks_managed_node_group
 }
