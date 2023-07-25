@@ -33,7 +33,3 @@ module "eks_managed_node_group" {
     resourcePrefix = var.resourcePrefix
   }
 }
-
-output "nodegroups" {
-  value = {for ngKey, ng in var.nodeGroups: "${var.resourcePrefix}-${ngKey}" => module.eks_managed_node_group[ngKey] }
-}
