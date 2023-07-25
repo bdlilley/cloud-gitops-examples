@@ -1,6 +1,5 @@
 output "irsa" {
   value = {
-    argocd               = module.iam-assumable-role-argocd.iam_role_arn
     aws-lb-controller    = module.iam-assumable-role-aws-lb-controller.iam_role_arn
     ext-dns              = module.iam-assumable-role-ext-dns.iam_role_arn
     ext-secrets          = module.iam-assumable-role-ext-secrets.iam_role_arn
