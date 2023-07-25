@@ -33,3 +33,8 @@ module "eks_managed_node_group" {
     resourcePrefix = var.resourcePrefix
   }
 }
+
+output "nodegroups" {
+  for_each = var.nodeGroups
+  value = eks_managed_node_group[each.key]
+}
