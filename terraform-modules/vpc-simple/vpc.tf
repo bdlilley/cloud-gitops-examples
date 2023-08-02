@@ -123,41 +123,41 @@ resource "aws_nat_gateway" "nat1" {
 }
 
 
-resource "aws_security_group" "common" {
-  name        = "${var.resourcePrefix}-common"
-  description = "common multi-cluster SG"
-  vpc_id      = aws_vpc.vpc.id
+# resource "aws_security_group" "common" {
+#   name        = "${var.resourcePrefix}-common"
+#   description = "common intra-vpc sg"
+#   vpc_id      = aws_vpc.vpc.id
 
-  ingress {
-    description = "all from private"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["10.0.0.0/8", "192.168.0.0/16", "0.0.0.0/0"]
-  }
+#   ingress {
+#     description = "all from vpc"
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = [aws_vpc.vpc.cidr_block]
+#   }
 
-  egress {
-    description = "all to private"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["10.0.0.0/8", "192.168.0.0/16", "0.0.0.0/0"]
-  }
+#   egress {
+#     description = "all to vpc"
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = [aws_vpc.vpc.cidr_block]
+#   }
 
-  egress {
-    description = "https to internet"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+#   egress {
+#     description = "https to internet"
+#     from_port   = 443
+#     to_port     = 443
+#     protocol    = "TCP"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
 
-  tags = {
-    Name = "${var.resourcePrefix}-common"
-  }
-}
+#   tags = {
+#     Name = "${var.resourcePrefix}-common"
+#   }
+# }
 
-output "commonSecurityGroup" {
-  value = aws_security_group.common
-}
+# output "commonSecurityGroup" {
+#   value = aws_security_group.common
+# }
 

@@ -4,7 +4,7 @@ variable "vpcConfig" {
 
 variable "resourcePrefix" {
   type        = string
-  description = "name of current module, used in all resource names"
+  description = "prefix for all resource names"
 }
 
 variable "tags" {
