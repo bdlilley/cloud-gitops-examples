@@ -194,10 +194,10 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ (ds "tf").eks.value.eks.id }}-gloo-tls
+  name: {{ (ds "tf").eks.value.eks.id }}-gloo-mgmt
   namespace: argocd
   labels:
-    solo.io/gloo-component: gloo-platform-tls
+    solo.io/gloo-component: gloo-platform
 spec:
   project: default
   syncPolicy:
