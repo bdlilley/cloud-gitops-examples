@@ -5,3 +5,4 @@ deploy
 deployment
 ben-hack
 *.tfplan
+.dist

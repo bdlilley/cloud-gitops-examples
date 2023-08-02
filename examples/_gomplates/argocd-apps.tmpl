@@ -190,3 +190,138 @@ spec:
   destination:
     server: {{ (index (ds "tf") "argocd-destination-server").value }}
     namespace: gloo-mesh
+--- 
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ (ds "tf").eks.value.eks.id }}-gloo-tls
+  namespace: argocd
+  labels:
+    solo.io/gloo-component: gloo-platform-tls
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true 
+    syncOptions:
+    - CreateNamespace=false
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m0s
+  source:
+    repoURL: https://github.com/bdlilley/cloud-gitops-examples.git
+    path: argocd/common-mgmt-server
+    targetRevision: main
+    directory:
+      recurse: true
+  destination:
+    server: {{ (index (ds "tf") "argocd-destination-server").value }}
+    namespace: gloo-mesh
+--- 
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ (ds "tf").eks.value.eks.id }}-gloo-platform
+  namespace: argocd
+  labels:
+    solo.io/gloo-component: gloo-platform
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true 
+    syncOptions:
+    - CreateNamespace=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m0s
+  destination:
+    server: {{ (index (ds "tf") "argocd-destination-server").value }}
+    namespace: gloo-mesh
+  source:
+    chart: gloo-platform
+    repoURL:  {{ (ds "env").gloo.repo }}
+    targetRevision: {{ (ds "env").gloo.version }}
+    helm:
+      values: |
+        global:
+          common:
+            cluster: {{ (ds "tf").eks.value.eks.id }}
+        common:
+          cluster: {{ (ds "tf").eks.value.eks.id }}
+        demo:
+          manageAddonNamespace: true
+        extAuthService:
+          enabled: false
+        licensing:
+          licenseSecretName: gloo-platform-license
+        glooMgmtServer:
+          enabled: true
+          relay:
+            disableCa: true
+            disableCaCertGeneration: true
+            disableTokenGeneration: true
+            pushRbac: true
+            tlsSecret:
+              name: relay-server-tls-secret
+          serviceOverrides:
+            metadata:
+              annotations:
+                external-dns.alpha.kubernetes.io/hostname: mgmt.{{ (ds "tf").privateHzName.value }}
+                # external-dns.alpha.kubernetes.io/aws-failover: PRIMARY
+                # external-dns.alpha.kubernetes.io/set-identifier: {{ (ds "tf").region }}
+                external-dns.alpha.kubernetes.io/alias: "true"
+                external-dns.alpha.kubernetes.io/aws-health-check-id: 00000000-0000-0000-0000-000000000000
+                service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=false
+                service.beta.kubernetes.io/aws-load-balancer-backend-protocol: TCP
+                service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+                service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+                service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+                service.beta.kubernetes.io/aws-load-balancer-type: external
+        glooUi:
+          enabled: true
+        istioInstallations:
+          enabled: false
+        legacyMetricsPipeline:
+          enabled: false
+        prometheus:
+          enabled: true
+          server:
+            service:
+              type: LoadBalancer
+              annotations:
+                external-dns.alpha.kubernetes.io/hostname: prometheus.{{ (ds "tf").privateHzName.value }}
+                external-dns.alpha.kubernetes.io/alias: "true"
+                service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=false
+                service.beta.kubernetes.io/aws-load-balancer-backend-protocol: TCP
+                service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+                service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+                service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+                service.beta.kubernetes.io/aws-load-balancer-type: external
+        telemetryCollector:
+          config:
+            exporters:
+              otlp:
+                endpoint: gloo-telemetry-gateway.gloo-mesh:4317
+          enabled: true
+        telemetryGateway:
+          enabled: true
+          service:
+            annotations:
+              external-dns.alpha.kubernetes.io/hostname: otel.{{ (ds "tf").privateHzName.value }}
+              external-dns.alpha.kubernetes.io/alias: "true"
+              service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=false
+              service.beta.kubernetes.io/aws-load-balancer-backend-protocol: TCP
+              service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+              service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+              service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+              service.beta.kubernetes.io/aws-load-balancer-type: external
+            type: LoadBalancer
