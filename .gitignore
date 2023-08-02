@@ -6,3 +6,4 @@ deployment
 ben-hack
 *.tfplan
 .dist
+.module-outputs.json
