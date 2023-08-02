@@ -3,7 +3,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-aws-lb
+  name: {{ (ds "tf").eks.value.eks.id }}-aws-lb
   namespace: argocd
   labels:
     solo.io/infra: aws-load-balancer
@@ -18,12 +18,12 @@ spec:
     helm:
       values: |
         replicaCount: 1
-        clusterName: template-default
+        clusterName: {{ (ds "tf").eks.value.eks.id }}
         serviceAccount:
           create: true
           name: aws-load-balancer-controller
           annotations:
-            eks.amazonaws.com/role-arn: arn:aws:iam::931713665590:role/template-default-aws-lb-controller
+            eks.amazonaws.com/role-arn: {{ index (ds "tf").eks.value.irsa "aws-lb-controller" }}
   syncPolicy:
     automated:
       prune: true
@@ -37,13 +37,13 @@ spec:
         factor: 2
         maxDuration: 3m0s
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ (index (ds "tf") "argocd-destination-server").value }}
     namespace: kube-system  
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-ext-secrets
+  name: {{ (ds "tf").eks.value.eks.id }}-ext-secrets
   namespace: argocd
   labels:
     solo.io/infra: external-secrets
@@ -61,7 +61,7 @@ spec:
           create: true
           name: external-secrets
           annotations:
-            eks.amazonaws.com/role-arn: arn:aws:iam::931713665590:role/template-default-ext-secrets
+            eks.amazonaws.com/role-arn: {{ index (ds "tf").eks.value.irsa "ext-secrets" }}
   syncPolicy:
     automated:
       prune: true
@@ -75,13 +75,13 @@ spec:
         factor: 2
         maxDuration: 3m0s
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ (index (ds "tf") "argocd-destination-server").value }}
     namespace: kube-system  
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-cert-manager
+  name: {{ (ds "tf").eks.value.eks.id }}-cert-manager
   namespace: argocd
   labels:
     solo.io/infra: cert-manager
@@ -109,13 +109,13 @@ spec:
         factor: 2
         maxDuration: 3m0s
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ (index (ds "tf") "argocd-destination-server").value }}
     namespace: kube-system  
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-external-dns
+  name: {{ (ds "tf").eks.value.eks.id }}-external-dns
   namespace: argocd
   labels:
     solo.io/infra: external-dns
@@ -132,20 +132,20 @@ spec:
         serviceAccount:
           name: external-dns
           annotations:
-            eks.amazonaws.com/role-arn: arn:aws:iam::931713665590:role/template-default-ext-dns
+            eks.amazonaws.com/role-arn: {{ index (ds "tf").eks.value.irsa "ext-dns" }}
         sources:
         - service
         provider: aws
         registry: txt
-        txtPrefix: template-default
-        txtOwnerId: external-dns-template-default
+        txtPrefix: {{ (ds "tf").eks.value.eks.id }}
+        txtOwnerId: external-dns-{{ (ds "tf").eks.value.eks.id }}
         domainFilters:
-        - template.vpc
+        - {{ (ds "tf").privateHzName.value }}
         extraArgs: 
         - --aws-zone-type=private
         env:
         - name: AWS_DEFAULT_REGION
-          value: us-east-1
+          value: {{ (ds "tf").region.value }}
   syncPolicy:
     automated:
       prune: true
@@ -159,5 +159,5 @@ spec:
         factor: 2
         maxDuration: 3m0s
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ (index (ds "tf") "argocd-destination-server").value }}
     namespace: kube-system  

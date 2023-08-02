@@ -1,0 +1,18 @@
+# https://docs.solo.io/gloo-mesh-enterprise/latest/setup/prod/certs/istio/managed/intermediate-ca/
+apiVersion: admin.gloo.solo.io/v2
+kind: RootTrustPolicy
+metadata:
+  name: root-trust-policy
+  namespace: gloo-mesh
+spec:
+  config:
+    autoRestartPods: true
+    intermediateCertOptions:
+      secretRotationGracePeriodRatio: 0.1
+      ttlDays: 1
+    mgmtServerCa: 
+      generated:
+        ttlDays: 730
+      secretRef:
+         name: istio-root-trust.gloo-mesh
+         namespace: gloo-mesh
