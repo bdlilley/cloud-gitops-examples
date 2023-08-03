@@ -10,7 +10,7 @@ gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/argocd-i
 gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/ilm.yaml > .dist/argocd-resources/ilm.yaml
 
 # gomplate -d tf=.module-outputs.json -f ../_gomplates/gp-install.tmpl > .dist/gp-install/kustomization.yaml
-clusterarn=$(terraform output --json | jq -r '.eks.value.eks.arn' | sed -r 's/[:\/]+/\-/g')
+clusterarn=$(terraform output --json | jq -r '.eks.value.eks_clean_arn')
 rm -rf ../../argocd/generated/${clusterarn}
 mkdir -p ../../argocd/generated/${clusterarn}
 
