@@ -100,6 +100,12 @@ spec:
           enabled: false
         licensing:
           licenseSecretName: gloo-platform-license
+        
+        glooAgent:
+          enabled: true
+          relay:
+            serverAddress: "gloo-mesh-mgmt-server.gloo-mesh:9900"
+        
         glooMgmtServer:
           enabled: true
           relay:
