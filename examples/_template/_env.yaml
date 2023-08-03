@@ -6,3 +6,4 @@ istio:
   revision: 1-17-2
   hub: us-docker.pkg.dev/gloo-mesh/istio-workshops
   tag: 1.17.2-solo
+singleCluster: true
