@@ -3,13 +3,14 @@ kind: Kustomization
 namespace: argocd
 resources:
 - https://raw.githubusercontent.com/argoproj/argo-cd/v2.7.9/manifests/install.yaml
-patches:
-  - target:
-      kind: ConfigMap
-      name: argocd-cm
-    patch: |
-      data:
-        timeout.reconciliation: 30s
+patchesStrategicMerge:
+- |-
+  kind: ConfigMap
+  apiVersion: v1
+  metadata:
+    name: argocd-cm
+  data:
+    timeout.reconciliation: 30s
 patchesJson6902:
   - target:
       kind: ServiceAccount
