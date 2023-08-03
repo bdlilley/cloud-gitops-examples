@@ -7,3 +7,4 @@ istio:
   hub: us-docker.pkg.dev/gloo-mesh/istio-workshops
   tag: 1.17.2-solo
 singleCluster: true
+singleWorkspace: true
