@@ -38,6 +38,10 @@ output "eks_clean_arn" {
   value = replace(replace(module.eks-default.eks.arn, ":", "-"), "/", "-")
 }
 
+output "eks_cluster_id" {
+  value = sha256(replace(replace(module.eks-default.eks.arn, ":", "-"), "/", "-"))
+}
+
 output "argocd-destination-server" {
   value = local.argocd-destination-server
 }

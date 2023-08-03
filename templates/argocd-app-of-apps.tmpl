@@ -13,7 +13,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/bdlilley/cloud-gitops-examples.git
-    path: argocd/generated/{{ (ds "tf").eks_clean_arn.value }}
+    path: argocd/generated/{{ (ds "tf").eks_cluster_id.value }}
     targetRevision: main
     directory:
       recurse: true
