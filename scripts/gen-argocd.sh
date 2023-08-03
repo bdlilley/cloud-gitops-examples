@@ -4,7 +4,8 @@ rm -rf .dist
 mkdir -p .dist/argocd-install
 mkdir -p .dist/argocd-resources
 
-gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/argocd-apps.tmpl > .dist/argocd-resources/apps.yaml
+gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/argocd-infra-apps.tmpl > .dist/argocd-resources/infra-apps.yaml
+gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/argocd-gloo-platform-apps.tmpl > .dist/argocd-resources/gloo-platform-apps.yaml
 gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/argocd-install.tmpl > .dist/argocd-install/kustomization.yaml
 gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/ilm.yaml > .dist/argocd-resources/ilm.yaml
 
