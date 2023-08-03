@@ -2,8 +2,18 @@
 
 rm -rf .dist
 mkdir -p .dist/argocd-install
-mkdir -p .dist/argocd-apps
+mkdir -p .dist/argocd-resources
 
-gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/argocd-apps.tmpl > .dist/argocd-apps/apps.yaml
+gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/argocd-apps.tmpl > .dist/argocd-resources/apps.yaml
 gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/argocd-install.tmpl > .dist/argocd-install/kustomization.yaml
+gomplate -d env=_env.yaml -d tf=.module-outputs.json -f ../../templates/ilm.yaml > .dist/argocd-resources/ilm.yaml
+
 # gomplate -d tf=.module-outputs.json -f ../_gomplates/gp-install.tmpl > .dist/gp-install/kustomization.yaml
+clusterarn=$(terraform output --json | jq -r '.eks.value.eks.arn' | sed -r 's/[:\/]+/\-/g')
+rm -rf ../../argocd/generated/${clusterarn}
+mkdir -p ../../argocd/generated/${clusterarn}
+
+cp -rf .dist/argocd-resources/* ../../argocd/generated/${clusterarn}
+git add -A ../../argocd/generated
+git commit -a -m "generated ${clusterarn}"
+git push

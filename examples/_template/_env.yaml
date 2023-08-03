@@ -2,3 +2,7 @@ gloo:
   # #https://storage.googleapis.com/gloo-platform-dev/platform-charts/helm-charts
   repo: https://storage.googleapis.com/gloo-platform/helm-charts
   version: v2.4.0-rc1
+istio:
+  revision: 1-17-2
+  hub: us-docker.pkg.dev/gloo-mesh/istio-workshops
+  tag: 1.17.2-solo
