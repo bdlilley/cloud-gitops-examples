@@ -105,22 +105,18 @@ spec:
           enabled: true
           relay:
             serverAddress: "gloo-mesh-mgmt-server.gloo-mesh:9900"
-            clientTlsSecret:
-              name: relay-server-tls-secret
-            tokenSecret:
-              key: null
-              name: null
-              namespace: null
-        
         glooMgmtServer:
           enabled: true
-          relay:
-            disableCa: true
-            disableCaCertGeneration: true
-            disableTokenGeneration: true
-            pushRbac: true
-            tlsSecret:
-              name: relay-server-tls-secret
+        
+        # glooMgmtServer:
+         # enabled: true
+         # relay:
+         #   disableCa: true
+         #   disableCaCertGeneration: true
+         #   disableTokenGeneration: true
+         #   pushRbac: true
+         #   tlsSecret:
+         #     name: relay-server-tls-secret
           serviceOverrides:
             metadata:
               annotations:
