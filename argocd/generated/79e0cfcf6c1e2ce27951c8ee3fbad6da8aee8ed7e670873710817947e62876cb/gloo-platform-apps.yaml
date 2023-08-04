@@ -77,13 +77,13 @@ spec:
         
         glooMgmtServer:
           enabled: true
-           relay:
-             disableCa: true
-             disableCaCertGeneration: true
-             disableTokenGeneration: true
-             pushRbac: true
-             tlsSecret:
-               name: mgmt-server-tls
+          relay:
+            disableCa: true
+            disableCaCertGeneration: true
+            disableTokenGeneration: true
+            pushRbac: true
+            tlsSecret:
+              name: mgmt-server-tls
           serviceOverrides:
             metadata:
               annotations:
