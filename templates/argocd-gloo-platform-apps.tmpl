@@ -74,6 +74,12 @@ spec:
           enabled: true
           relay:
             serverAddress: "gloo-mesh-mgmt-server.gloo-mesh:9900"
+            clientTlsSecret:
+              name: {{ (ds "tf").eks.value.eks.id }}-tls
+            tokenSecret:
+              key: null
+              name: null
+              namespace: null
         {{ end }}
         glooMgmtServer:
           enabled: true
