@@ -16,7 +16,8 @@ clusterid=$(terraform output --json | jq -r '.eks_cluster_id.value')
 rm -rf ../../argocd/generated/${clusterid}
 mkdir -p ../../argocd/generated/${clusterid}
 
-cp -rf .dist/argocd-resources/* ../../argocd/generated/${clusterid}
+cp -rf ../../argocd/common/* ../../argocd/generated/${clusterid}/
+cp -rf .dist/argocd-resources/* ../../argocd/generated/${clusterid}/
 git add -A ../../argocd/generated
 git commit -a -m "generated ${clusterid}"
 git push

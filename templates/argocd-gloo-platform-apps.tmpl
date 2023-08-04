@@ -31,37 +31,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ (ds "tf").eks.value.eks.id }}-gloo-mgmt
-  namespace: argocd
-  labels:
-    solo.io/gloo-component: gloo-platform
-spec:
-  project: default
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true 
-    syncOptions:
-    - CreateNamespace=false
-    retry:
-      limit: 10
-      backoff:
-        duration: 5s
-        factor: 2
-        maxDuration: 3m0s
-  source:
-    repoURL: https://github.com/bdlilley/cloud-gitops-examples.git
-    path: argocd/common-mgmt-server
-    targetRevision: main
-    directory:
-      recurse: true
-  destination:
-    server: {{ (index (ds "tf") "argocd-destination-server").value }}
-    namespace: gloo-mesh
---- 
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
   name: {{ (ds "tf").eks.value.eks.id }}-gloo-platform
   namespace: argocd
   labels:
@@ -180,6 +149,68 @@ metadata:
   namespace: gloo-mesh
 spec:
   clusterDomain: cluster.local
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mgmt-server
+  namespace: gloo-mesh
+spec:
+  # Secret names are always required.
+  secretName: mgmt-server-tls
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  subject:
+    organizations:
+      - gloo-mesh-mgmt-server
+  commonName: gloo-mesh-mgmt-server
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  dnsNames:
+    - "*.gloo-mesh"
+    - "*.vpc"
+    - "*.example.com"
+    - "*.elb.us-east-1.amazonaws.com"
+    - "*.elb.us-west-1.amazonaws.com"
+  # Issuer references are always required.
+  issuerRef:
+    name: root-ca
+    kind: Issuer
+--- 
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ (ds "tf").eks.value.eks.id }}-gloo-mgmt
+  namespace: argocd
+  labels:
+    solo.io/gloo-component: gloo-platform
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true 
+    syncOptions:
+    - CreateNamespace=false
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m0s
+  source:
+    repoURL: https://github.com/bdlilley/cloud-gitops-examples.git
+    path: argocd/common-mgmt-server
+    targetRevision: main
+    directory:
+      recurse: true
+  destination:
+    server: {{ (index (ds "tf") "argocd-destination-server").value }}
+    namespace: gloo-mesh
 {{ end }}
 
 {{ if (ds "env").singleWorkspace }}
