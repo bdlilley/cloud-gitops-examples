@@ -2,7 +2,7 @@
 apiVersion: admin.gloo.solo.io/v2
 kind: IstioLifecycleManager
 metadata:
-  name: template-default-istiod
+  name: ben-default-istiod
   namespace: gloo-mesh
 spec:
   installations:
@@ -10,7 +10,7 @@ spec:
   - revision: 1-17-2
     # List all workload clusters to install Istio into
     clusters:
-    - name: template-default
+    - name: ben-default
       defaultRevision: true
     istioOperatorSpec:
       # Only the control plane components are installed

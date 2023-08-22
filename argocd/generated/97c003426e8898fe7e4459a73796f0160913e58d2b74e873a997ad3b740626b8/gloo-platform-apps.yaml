@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-gloo-crds
+  name: ben-default-gloo-crds
   namespace: argocd
   labels:
     solo.io/gloo-component: gloo-platform
@@ -11,7 +11,7 @@ spec:
   source:
     chart: gloo-platform-crds
     repoURL:  https://storage.googleapis.com/gloo-platform/helm-charts
-    targetRevision: v2.4.0-rc1
+    targetRevision: v2.4.0-rc2
   syncPolicy:
     automated:
       prune: true
@@ -31,7 +31,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-gloo-platform
+  name: ben-default-gloo-platform
   namespace: argocd
   labels:
     solo.io/gloo-component: gloo-platform
@@ -55,14 +55,14 @@ spec:
   source:
     chart: gloo-platform
     repoURL:  https://storage.googleapis.com/gloo-platform/helm-charts
-    targetRevision: v2.4.0-rc1
+    targetRevision: v2.4.0-rc2
     helm:
       values: |
         global:
           common:
-            cluster: template-default
+            cluster: ben-default
         common:
-          cluster: template-default
+          cluster: ben-default
         demo:
           manageAddonNamespace: true
         extAuthService:
@@ -75,7 +75,7 @@ spec:
           relay:
             serverAddress: "gloo-mesh-mgmt-server.gloo-mesh:9900"
             clientTlsSecret:
-              name: template-default-tls
+              name: ben-default-tls
             tokenSecret:
               key: null
               name: null
@@ -93,7 +93,7 @@ spec:
           serviceOverrides:
             metadata:
               annotations:
-                external-dns.alpha.kubernetes.io/hostname: mgmt.template.vpc
+                external-dns.alpha.kubernetes.io/hostname: mgmt.ben.vpc
                 # external-dns.alpha.kubernetes.io/aws-failover: PRIMARY
                 # external-dns.alpha.kubernetes.io/set-identifier: us-east-1
                 external-dns.alpha.kubernetes.io/alias: "true"
@@ -116,7 +116,7 @@ spec:
             service:
               type: LoadBalancer
               annotations:
-                external-dns.alpha.kubernetes.io/hostname: prometheus.template.vpc
+                external-dns.alpha.kubernetes.io/hostname: prometheus.ben.vpc
                 external-dns.alpha.kubernetes.io/alias: "true"
                 service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=false
                 service.beta.kubernetes.io/aws-load-balancer-backend-protocol: TCP
@@ -134,7 +134,7 @@ spec:
           enabled: true
           service:
             annotations:
-              external-dns.alpha.kubernetes.io/hostname: otel.template.vpc
+              external-dns.alpha.kubernetes.io/hostname: otel.ben.vpc
               external-dns.alpha.kubernetes.io/alias: "true"
               service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=false
               service.beta.kubernetes.io/aws-load-balancer-backend-protocol: TCP
@@ -149,7 +149,7 @@ spec:
 apiVersion: admin.gloo.solo.io/v2
 kind: KubernetesCluster
 metadata:
-  name:  template-default
+  name:  ben-default
   namespace: gloo-mesh
 spec:
   clusterDomain: cluster.local
@@ -185,10 +185,10 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: template-default
+  name: ben-default
   namespace: gloo-mesh
 spec:
-  secretName: template-default-tls
+  secretName: ben-default-tls
   duration: 2160h0m0s
   renewBefore: 360h0m0s
   subject:
@@ -201,7 +201,7 @@ spec:
     - server auth
     - client auth
   dnsNames:
-    - template-default
+    - ben-default
   issuerRef:
     name: root-ca
     kind: Issuer
@@ -209,7 +209,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-gloo-mgmt
+  name: ben-default-gloo-mgmt
   namespace: argocd
   labels:
     solo.io/gloo-component: gloo-platform

@@ -3,7 +3,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-aws-lb
+  name: ben-default-aws-lb
   namespace: argocd
   labels:
     solo.io/infra: aws-load-balancer
@@ -18,12 +18,12 @@ spec:
     helm:
       values: |
         replicaCount: 1
-        clusterName: template-default
+        clusterName: ben-default
         serviceAccount:
           create: true
           name: aws-load-balancer-controller
           annotations:
-            eks.amazonaws.com/role-arn: arn:aws:iam::931713665590:role/template-default-aws-lb-controller
+            eks.amazonaws.com/role-arn: arn:aws:iam::931713665590:role/ben-default-aws-lb-controller
   syncPolicy:
     automated:
       prune: true
@@ -43,7 +43,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-ext-secrets
+  name: ben-default-ext-secrets
   namespace: argocd
   labels:
     solo.io/infra: external-secrets
@@ -61,7 +61,7 @@ spec:
           create: true
           name: external-secrets
           annotations:
-            eks.amazonaws.com/role-arn: arn:aws:iam::931713665590:role/template-default-ext-secrets
+            eks.amazonaws.com/role-arn: arn:aws:iam::931713665590:role/ben-default-ext-secrets
   syncPolicy:
     automated:
       prune: true
@@ -81,7 +81,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-cert-manager
+  name: ben-default-cert-manager
   namespace: argocd
   labels:
     solo.io/infra: cert-manager
@@ -115,7 +115,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: template-default-external-dns
+  name: ben-default-external-dns
   namespace: argocd
   labels:
     solo.io/infra: external-dns
@@ -132,15 +132,15 @@ spec:
         serviceAccount:
           name: external-dns
           annotations:
-            eks.amazonaws.com/role-arn: arn:aws:iam::931713665590:role/template-default-ext-dns
+            eks.amazonaws.com/role-arn: arn:aws:iam::931713665590:role/ben-default-ext-dns
         sources:
         - service
         provider: aws
         registry: txt
-        txtPrefix: template-default
-        txtOwnerId: external-dns-template-default
+        txtPrefix: ben-default
+        txtOwnerId: external-dns-ben-default
         domainFilters:
-        - template.vpc
+        - ben.vpc
         extraArgs: 
         - --aws-zone-type=private
         env:
