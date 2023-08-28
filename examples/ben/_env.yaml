@@ -8,3 +8,4 @@ istio:
   tag: 1.17.2-solo
 singleCluster: true
 singleWorkspace: true
+defaultGateway: true

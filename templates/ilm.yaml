@@ -66,3 +66,76 @@ spec:
             # but is useful for PoCs or demos in which you use self-signed certificates.
             - name: PILOT_SKIP_VALIDATE_TRUST_DOMAIN
               value: "true"
+{{ if (ds "env").defaultGateway }}
+---
+# one installation per workload server b/c the weighted routing annotation
+# has a different set identifier
+apiVersion: admin.gloo.solo.io/v2
+kind: GatewayLifecycleManager
+metadata:
+  name: istio-ingressgateway
+  namespace: gloo-mesh
+spec:
+  installations:
+  - gatewayRevision: {{ (ds "env").istio.revision }}
+    # List all workload clusters to install Istio into
+    clusters:
+    - name: {{ (ds "tf").eks.value.eks.id }}
+      # If set to true, the spec for this revision is applied in the cluster
+      activeGateway: true
+    istioOperatorSpec:
+      # No control plane components are installed
+      profile: empty
+      # Solo.io Istio distribution repository; required for Gloo Istio.
+      # You get the repo key from your Solo Account Representative.
+      hub: {{ (ds "env").istio.hub }}
+      # Any Solo.io Gloo Istio tag
+      tag: {{ (ds "env").istio.tag }}
+      components:
+        ingressGateways:
+        # Enable the default ingress gateway
+        - name: istio-ingressgateway
+          # Deployed to gloo-mesh-gateways by default
+          namespace: gloo-mesh-gateways
+          enabled: true
+          label:
+            # Set a unique label for the gateway. This is required to
+            # ensure Gateways can select this workload
+            istio: ingressgateway
+            app: istio-ingressgateway
+          k8s:
+            serviceAnnotations:
+              external-dns.alpha.kubernetes.io/hostname: ingress.ben.vpc
+              external-dns.alpha.kubernetes.io/alias: "true"
+              # can't set ttl on alias records; they are always 60s
+              # external-dns.alpha.kubernetes.io/ttl: "10"
+              external-dns.alpha.kubernetes.io/aws-health-check-id: 00000000-0000-0000-0000-000000000000
+              service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=false
+              service.beta.kubernetes.io/aws-load-balancer-backend-protocol: TCP
+              service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+              service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+              service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+              service.beta.kubernetes.io/aws-load-balancer-type: external
+            service:
+              type: LoadBalancer
+              selector:
+                istio: ingressgateway
+              # Default ports
+              ports:
+                # Port for health checks on path /healthz/ready.
+                # For AWS ELBs, this port must be listed first.
+                - name: status-port
+                  port: 15021
+                  targetPort: 15021
+                # Main HTTP ingress port
+                - name: http2
+                  port: 80
+                  targetPort: 8080
+                # Main HTTPS ingress port
+                - name: https
+                  port: 443
+                  targetPort: 8443
+                - name: tls
+                  port: 15443
+                  targetPort: 15443
+{{ end }}
