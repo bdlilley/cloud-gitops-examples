@@ -11,7 +11,7 @@ spec:
   source:
     chart: gloo-platform-crds
     repoURL:  https://storage.googleapis.com/gloo-platform/helm-charts
-    targetRevision: v2.4.0-rc5
+    targetRevision: v2.3.15
   syncPolicy:
     automated:
       prune: true
@@ -55,7 +55,7 @@ spec:
   source:
     chart: gloo-platform
     repoURL:  https://storage.googleapis.com/gloo-platform/helm-charts
-    targetRevision: v2.4.0-rc5
+    targetRevision: v2.3.15
     helm:
       values: |
         global:
