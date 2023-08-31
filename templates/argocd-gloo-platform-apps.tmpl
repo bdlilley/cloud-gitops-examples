@@ -125,11 +125,20 @@ spec:
                 service.beta.kubernetes.io/aws-load-balancer-scheme: internal
                 service.beta.kubernetes.io/aws-load-balancer-type: external
         telemetryCollector:
+          enabled: true
           config:
             exporters:
               otlp:
                 endpoint: otel.{{ (ds "tf").privateHzName.value }}:4317
-          enabled: true
+                tls:
+                  ca_file: /etc/otel-certs/ca.crt
+          extraVolumes:
+            - name: root-ca
+              secret:
+                defaultMode: 420
+                secretName: root-issuer-ca
+        telemetryCollectorCustomization:
+          serverName: otel.{{ (ds "tf").privateHzName.value }}
         telemetryGatewayCustomization:
           disableCertGeneration: true
         telemetryGateway:
