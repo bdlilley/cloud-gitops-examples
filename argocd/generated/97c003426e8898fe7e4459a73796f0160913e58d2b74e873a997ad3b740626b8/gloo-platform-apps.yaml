@@ -128,8 +128,10 @@ spec:
           config:
             exporters:
               otlp:
-                endpoint: gloo-telemetry-gateway.gloo-mesh:4317
+                endpoint: otel.ben.vpc:4317
           enabled: true
+        telemetryGatewayCustomization:
+          disableCertGeneration: true
         telemetryGateway:
           enabled: true
           service:
@@ -154,6 +156,7 @@ metadata:
 spec:
   clusterDomain: cluster.local
 ---
+# mgmt server
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -182,6 +185,7 @@ spec:
     name: root-ca
     kind: Issuer
 ---
+# agent
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -202,6 +206,31 @@ spec:
     - client auth
   dnsNames:
     - ben-default
+  issuerRef:
+    name: root-ca
+    kind: Issuer
+---
+# metrics gateway
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gloo-telemetry-gateway
+  namespace: gloo-mesh
+spec:
+  secretName: gloo-telemetry-gateway-tls-secret
+  duration: 2160h0m0s
+  renewBefore: 360h0m0s
+  subject:
+    organizations:
+      - otel.ben.vpc
+  commonName: otel.ben.vpc
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  dnsNames:
+    - otel.ben.vpc
   issuerRef:
     name: root-ca
     kind: Issuer
