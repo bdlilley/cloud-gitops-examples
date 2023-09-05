@@ -1,0 +1,181 @@
+---
+
+apiVersion: networking.gloo.solo.io/v2
+kind: VirtualGateway
+metadata:
+  name: north-south-gw
+  namespace: istio-gateway-ns
+spec:
+  workloads:
+  - selector:
+      labels:
+        istio: ingressgateway
+      cluster: cluster-1
+  listeners:
+  - http: {}
+    port:
+      number: 80
+    allowedRouteTables:
+    - host: '*'
+      selector:
+        labels:
+          expose: "true"
+
+---
+
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: productpage
+  namespace: bookinfo
+  labels:
+    expose: "true"
+    app: bookinfo
+spec:
+  hosts:
+    - '*'
+  virtualGateways:
+    - name: north-south-gw
+      namespace: istio-gateway-ns
+      cluster: cluster-1
+  http:
+  # Route for the main productpage app
+  - name: notValues
+    matchers:
+    - uri:
+        prefix: /
+      headers:
+        - name: claim-match
+          value: notValues
+    # - uri:
+        # exact: /productpage
+    labels:
+      notValues: clientId
+    forwardTo:
+      destinations:
+      - ref:
+          name: httpbin
+          namespace: httpbin
+        port:
+          number: 8080
+  - name: values-clientId
+    matchers:
+    - uri:
+        prefix: /
+      headers:
+        - name: claim-match
+          value: values
+    labels:
+      values: clientId
+    forwardTo:
+      destinations:
+      - ref:
+          name: httpbin
+          namespace: httpbin
+        port:
+          number: 8080
+  - name: bookinfo
+    matchers:
+    - uri:
+        prefix: /
+    - uri:
+        exact: /callback
+    forwardTo:
+      destinations:
+      - ref:
+          name: httpbin
+          namespace: httpbin
+        port:
+          number: 9080
+---
+apiVersion: security.policy.gloo.solo.io/v2
+kind: JWTPolicy
+metadata:
+  name: jwt-policy-values-clientid
+  namespace: bookinfo
+spec:
+  applyToRoutes:
+  - route:
+      labels:
+        values: clientId
+  config:
+    clearRouteCache: "FALSE"
+    claims:
+    - key: clientId
+      values:
+      - b4be92d5e22941d89e9793c0fa662fdd
+    providers:
+      provider1:
+        issuer: https://bdlilley.github.io/jwt-kit/provider1
+        remote:
+          url: https://bdlilley.github.io/jwt-kit/provider1/.well-known/jwks.json
+          destinationRef:
+            port:
+              number: 443
+            ref:
+              name: fake-idp
+              namespace: bookinfo
+              cluster: cluster-1
+            kind: EXTERNAL_SERVICE
+          enableAsyncFetch: true
+---
+apiVersion: security.policy.gloo.solo.io/v2
+kind: JWTPolicy
+metadata:
+  name: jwt-policy-notvalues-clientid
+  namespace: bookinfo
+spec:
+  applyToRoutes:
+  - route:
+      labels:
+        notValues: clientId
+  config:
+    # clearRouteCache: "TRUE"
+    # claims:
+    # - key: clientId
+    #   notValues:
+    #   - "*"
+    providers:
+      provider1:
+        issuer: https://bdlilley.github.io/jwt-kit/provider1
+        remote:
+          url: https://bdlilley.github.io/jwt-kit/provider1/.well-known/jwks.json
+          destinationRef:
+            port:
+              number: 443
+            ref:
+              name: fake-idp
+              namespace: bookinfo
+              cluster: cluster-1
+            kind: EXTERNAL_SERVICE
+        keepToken: true
+---
+apiVersion: networking.gloo.solo.io/v2
+kind: ExternalEndpoint
+metadata:
+  name: fake-idp
+  namespace: bookinfo
+  labels:
+    external-service: fake-idp
+spec:
+  address: bdlilley.github.io
+  ports:
+    - name: https
+      number: 443
+
+---
+apiVersion: networking.gloo.solo.io/v2
+kind: ExternalService
+metadata:
+  name: fake-idp
+  namespace: bookinfo
+spec:
+  selector:
+    external-service: fake-idp
+  hosts:
+  - bdlilley.github.io
+  ports:
+  - name: https
+    number: 443
+    protocol: HTTPS
+    clientsideTls: {}

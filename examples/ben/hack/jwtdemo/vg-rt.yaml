@@ -1,0 +1,196 @@
+---
+apiVersion: networking.gloo.solo.io/v2
+kind: VirtualGateway
+metadata:
+  name: default
+  namespace: gloo-mesh
+spec:
+  listeners:
+  - http: {}
+    port:
+      number: 80
+  workloads:
+  - selector:
+      labels:
+        istio: ingressgateway
+---
+# curl localhost:8888/httpbin-1/headers -i -H "Host: rt-1.example.com" -H "x-httpbin: rt-1" -H "Authorization: Bearer $(jwt-kit)"
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: httpbin-1
+  namespace: gloo-mesh
+spec:
+  hosts:
+    - '*' #'rt-1.example.com'
+  virtualGateways:
+    - name: default
+      namespace: gloo-mesh
+  http:
+    - name: sanity
+      matchers:
+        - uri:
+            prefix: /sanity
+      labels:
+        route: sanity
+      directResponse:
+        status: 200
+        body: "it's alive"
+    - name: httpbin-1
+      labels:
+        route: httpbin-1
+      matchers:
+        - uri:
+            prefix: /httpbin-1/
+      forwardTo:
+        pathRewrite: /
+        destinations:
+        - ref:
+            name: httpbin
+            namespace: httpbin
+          port:
+            name: http
+          kind: SERVICE
+---
+# curl localhost:8888/httpbin-2/headers -i -H "Host: rt-2.example.com" -H "x-httpbin: rt-2"
+# -H "Authorization: Bearer $(jwt-kit)"
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: httpbin-2
+  namespace: gloo-mesh
+spec:
+  hosts:
+    - 'rt-2.example.com'
+  virtualGateways:
+    - name: default
+      namespace: gloo-mesh
+  http:
+    - name: httpbin-2
+      labels:
+        route: httpbin-2
+      matchers:
+        - uri:
+            prefix: /httpbin-2/
+          headers:
+            - name: color
+              value: red
+      forwardTo:
+        pathRewrite: /
+        destinations:
+        - ref:
+            name: httpbin-2
+            namespace: httpbin-2
+          port:
+            name: http
+          kind: SERVICE
+---
+apiVersion: networking.gloo.solo.io/v2
+kind: ExternalEndpoint
+metadata:
+  name: fake-idp
+  namespace: gloo-mesh
+  labels:
+    external-service: fake-idp
+spec:
+  address: bdlilley.github.io
+  ports:
+    - name: https
+      number: 443
+---
+apiVersion: networking.gloo.solo.io/v2
+kind: ExternalService
+metadata:
+  name: fake-idp
+  namespace: gloo-mesh
+spec:
+  selector:
+    external-service: fake-idp
+  hosts:
+  - bdlilley.github.io
+  ports:
+  - name: https
+    number: 443
+    protocol: HTTPS
+    clientsideTls: {}
+---
+apiVersion: security.policy.gloo.solo.io/v2
+kind: JWTPolicy
+metadata:
+  name: httpbin-2
+  namespace: gloo-mesh
+spec:
+  applyToRoutes:
+  - route:
+      labels:
+        route: httpbin-2
+  config:
+    # claims:
+    # - key: color
+    #   values: [ red, black ]
+    # requiredScopes:
+    # - foo
+    claims:
+    - key: clientId
+      values:
+      - b4be92d5e22941d89e9793c0fa662fdd
+    # phase:
+    #   preAuthz: {}
+    providers:
+      provider1:
+        claimsToHeaders:
+        - claim: clientId
+          header: x-clientid
+        - claim: iss
+          header: x-iss
+        - claim: scopes
+          header: x-scopes
+        issuer: "https://bdlilley.github.io/jwt-kit/provider1"
+        audiences:
+        - https://fake-resource.solo.io
+        remote:
+          url: https://bdlilley.github.io/jwt-kit/provider1/.well-known/jwks.json
+          destinationRef:
+            kind: EXTERNAL_SERVICE
+            ref:
+              name: fake-idp
+        #   url: https://bdlilley.github.io/jwt-kit/provider1/.well-known/jwks.json
+        #   destinationRef:
+        #     ref:
+        #       name: fake-idp
+        #       namespace: gloo-mesh
+        #     kind: EXTERNAL_SERVICE
+        #     port:
+        #       number: 443
+        # keepToken: true
+# ---
+# apiVersion: security.policy.gloo.solo.io/v2
+# kind: JWTPolicy
+# metadata:
+#   name: httpbin-2-not-values
+#   namespace: gloo-mesh
+# spec:
+#   applyToRoutes:
+#   - route:
+#       labels:
+#         route: httpbin-2
+#   config:
+#     claims:
+#     - key: clientId
+#       notValues:
+#       - bad-value
+#     phase:
+#       preAuthz: {}
+#     providers:
+#       provider1:
+#         issuer: https://bdlilley.github.io/jwt-kit/provider1
+#         remote:
+#           url: https://bdlilley.github.io/jwt-kit/provider1/.well-known/jwks.json
+#           destinationRef:
+#             ref:
+#               name: fake-idp
+#               namespace: gloo-mesh
+#             kind: EXTERNAL_SERVICE
+#             port:
+#               number: 443
+#         keepToken: true
