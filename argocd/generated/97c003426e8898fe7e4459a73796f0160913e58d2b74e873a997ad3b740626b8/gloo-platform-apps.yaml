@@ -130,15 +130,6 @@ spec:
             exporters:
               otlp:
                 endpoint: otel.ben.vpc:4317
-                tls:
-                  ca_file: /etc/otel-certs/ca.crt
-          extraVolumes:
-            - name: root-ca
-              secret:
-                defaultMode: 420
-                secretName: root-issuer-ca
-        telemetryCollectorCustomization:
-          serverName: otel.ben.vpc
         telemetryGatewayCustomization:
           disableCertGeneration: true
         telemetryGateway:
