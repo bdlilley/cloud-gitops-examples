@@ -130,6 +130,31 @@ spec:
             exporters:
               otlp:
                 endpoint: otel.{{ (ds "tf").privateHzName.value }}:4317
+          extraVolumeMounts:
+            - mountPath: /etc/otel-certs
+              name: root-ca
+              readOnly: true
+            - mountPath: /conf
+              name: telemetry-configmap
+            - mountPath: /var/run/cilium
+              name: cilium-run
+          extraVolumes:
+            - name: root-ca
+              secret:
+                defaultMode: 420
+                secretName: root-issuer-ca
+            - configMap:
+                items:
+                  - key: relay
+                    path: relay.yaml
+                name: gloo-telemetry-collector-config
+              name: telemetry-configmap
+            - hostPath:
+                path: /var/run/cilium
+                type: DirectoryOrCreate
+              name: cilium-run
+        telemetryCollectorCustomization:
+          serverName: otel.{{ (ds "tf").privateHzName.value }}
         telemetryGatewayCustomization:
           disableCertGeneration: true
         telemetryGateway:
