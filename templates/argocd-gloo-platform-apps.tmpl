@@ -130,6 +130,13 @@ spec:
             exporters:
               otlp:
                 endpoint: otel.{{ (ds "tf").privateHzName.value }}:4317
+                tls:
+                  ca_file: /etc/otel-certs/ca.crt
+          extraVolumes:
+            - name: root-ca
+              secret:
+                defaultMode: 420
+                secretName: root-issuer-ca
         telemetryGatewayCustomization:
           disableCertGeneration: true
         telemetryGateway:
