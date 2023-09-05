@@ -137,6 +137,8 @@ spec:
               secret:
                 defaultMode: 420
                 secretName: root-issuer-ca
+        telemetryCollectorCustomization:
+          serverName: otel.{{ (ds "tf").privateHzName.value }}
         telemetryGatewayCustomization:
           disableCertGeneration: true
         telemetryGateway:
