@@ -130,10 +130,6 @@ spec:
             exporters:
               otlp:
                 endpoint: otel.ben.vpc:4317
-                tls:
-                  ca_file: /etc/otel-certs/ca.crt
-        telemetryCollectorCustomization:
-          serverName: otel.ben.vpc
         telemetryGatewayCustomization:
           disableCertGeneration: true
         telemetryGateway:

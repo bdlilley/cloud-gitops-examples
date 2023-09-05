@@ -130,10 +130,6 @@ spec:
             exporters:
               otlp:
                 endpoint: otel.{{ (ds "tf").privateHzName.value }}:4317
-                tls:
-                  ca_file: /etc/otel-certs/ca.crt
-        telemetryCollectorCustomization:
-          serverName: otel.{{ (ds "tf").privateHzName.value }}
         telemetryGatewayCustomization:
           disableCertGeneration: true
         telemetryGateway:
