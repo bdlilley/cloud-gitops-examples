@@ -5,7 +5,7 @@ gloo:
 istio:
   revision: 1-18-3
   hub: us-docker.pkg.dev/gloo-mesh/istio-workshops
-  tag: 1.18-3-solo
+  tag: 1.18.3-solo
 singleCluster: true
 singleWorkspace: true
 defaultGateway: true
