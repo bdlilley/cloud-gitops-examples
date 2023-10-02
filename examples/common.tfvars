@@ -34,6 +34,24 @@ vpcConfigs = {
       { cidr : "10.10.129.0/24", zoneId : "usw1-az3" }
     ]
   }
+
+  "eu-central-1" = {
+    # cidr of the entire VPC
+    cidr = "10.10.0.0/16"
+    # cidr used for client VPN connections; cannot overlap
+    # with VPC side above
+    vpnCidr = "10.0.0.0/22"
+    # "private" just means no placement of IGW
+    privateNets = [
+      { cidr : "10.10.0.0/18", zoneId : "euc1-az1" },
+      { cidr : "10.10.64.0/18", zoneId : "euc1-az3" }
+    ]
+    # "public" just means where the IGW will live
+    publicNets = [
+      { cidr : "10.10.128.0/24", zoneId : "euc1-az1" },
+      { cidr : "10.10.129.0/24", zoneId : "euc1-az3" }
+    ]
+  }
 }
 
 commonVpcConfigs = {

@@ -7,7 +7,7 @@ metadata:
 spec:
   installations:
   # The revision for this installation, such as 1-17-3
-  - revision: 1-17-2
+  - revision: 1-18-3
     # List all workload clusters to install Istio into
     clusters:
     - name: ben-default
@@ -20,7 +20,7 @@ spec:
       # You get the repo key from your Solo Account Representative.
       hub: us-docker.pkg.dev/gloo-mesh/istio-workshops
       # Any Solo.io Gloo Istio tag
-      tag: 1.17.2-solo
+      tag: 1.18-3-solo
       namespace: istio-system
       # Mesh configuration
       meshConfig:
@@ -77,7 +77,7 @@ metadata:
   namespace: gloo-mesh
 spec:
   installations:
-  - gatewayRevision: 1-17-2
+  - gatewayRevision: 1-18-3
     # List all workload clusters to install Istio into
     clusters:
     - name: ben-default
@@ -90,7 +90,7 @@ spec:
       # You get the repo key from your Solo Account Representative.
       hub: us-docker.pkg.dev/gloo-mesh/istio-workshops
       # Any Solo.io Gloo Istio tag
-      tag: 1.17.2-solo
+      tag: 1.18-3-solo
       components:
         ingressGateways:
         # Enable the default ingress gateway

@@ -1,11 +1,11 @@
 gloo:
   # #https://storage.googleapis.com/gloo-platform-dev/platform-charts/helm-charts
   repo: https://storage.googleapis.com/gloo-platform/helm-charts
-  version: v2.4.0
+  version: v2.4.2
 istio:
-  revision: 1-17-2
+  revision: 1-18-3
   hub: us-docker.pkg.dev/gloo-mesh/istio-workshops
-  tag: 1.17.2-solo
+  tag: 1.18-3-solo
 singleCluster: true
 singleWorkspace: true
 defaultGateway: true
