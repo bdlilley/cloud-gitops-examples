@@ -11,3 +11,5 @@ singleWorkspace: true
 defaultGateway: true
 extauth:
   enabled: true
+  opaSidecar:
+    enabled: true

@@ -71,6 +71,11 @@ spec:
           {{ else }}
           enabled: false
           {{ end }}
+          {{ if (ds "env").extauth.opaSidecar.enabled }}
+          extAuth:
+            opaServer:
+              enabled: true
+          {{ end }}
         licensing:
           licenseSecretName: gloo-platform-license
         {{ if (ds "env").singleCluster }}
