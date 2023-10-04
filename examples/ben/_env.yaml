@@ -13,3 +13,4 @@ extauth:
   enabled: true
   opaSidecar:
     enabled: true
+    config: ""
