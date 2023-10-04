@@ -9,3 +9,5 @@ istio:
 singleCluster: true
 singleWorkspace: true
 defaultGateway: true
+extauth:
+  enabled: true

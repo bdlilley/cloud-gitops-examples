@@ -66,7 +66,11 @@ spec:
         demo:
           manageAddonNamespace: true
         extAuthService:
+          {{ if (ds "env").extauth.enabled }}
+          enabled: true
+          {{ else }}
           enabled: false
+          {{ end }}
         licensing:
           licenseSecretName: gloo-platform-license
         {{ if (ds "env").singleCluster }}
