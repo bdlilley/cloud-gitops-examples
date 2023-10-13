@@ -73,6 +73,7 @@ spec:
           extAuth:
             opaServer:
               enabled: true
+              configYaml: ""
           
         licensing:
           licenseSecretName: gloo-platform-license
