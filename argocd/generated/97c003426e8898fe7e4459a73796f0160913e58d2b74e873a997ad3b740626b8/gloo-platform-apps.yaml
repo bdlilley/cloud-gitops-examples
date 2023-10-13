@@ -74,6 +74,7 @@ spec:
             opaServer:
               enabled: true
               configYaml: ""
+              config: ""
           
         licensing:
           licenseSecretName: gloo-platform-license
