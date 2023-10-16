@@ -13,4 +13,16 @@ extauth:
   enabled: true
   opaSidecar:
     enabled: true
-    config: ""
+    config: |
+    services:
+      s3:
+        url: https://my-example-opa-bucket.s3.eu-north-1.amazonaws.com
+        credentials:
+          s3_signing:
+            web_identity_credentials:
+              aws_region: eu-north-1
+              session_name: my-open-policy-agent # Optional. Default: open-policy-agent
+    bundles:
+      authz:
+        service: s3
+        resource: bundle.tar.gz
